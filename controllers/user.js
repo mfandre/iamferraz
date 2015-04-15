@@ -7,7 +7,7 @@ module.exports = function(app) {
 			//console.log(JSON.stringify(req.body));
 			console.log(JSON.stringify(user));
 
-			if(user.email === "fandre@gmail.com" && user.password === "dede12"){
+			if(user.email === "fandre@gmail.com" && user.password === "1234"){
 				res.setHeader('Content-Type', 'application/json');
 				res.end(JSON.stringify({ success : true, message:"Login efetuado!" }));
 				return;
