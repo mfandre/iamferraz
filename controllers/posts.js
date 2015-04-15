@@ -11,6 +11,7 @@ module.exports = function(app) {
 				if(erro){
 					res.setHeader('Content-Type', 'application/json');
 					res.end(JSON.stringify({ success : false, message:"Xiiiii deu zica!" + erro }));
+					return;
 				}
 
 				res.setHeader('Content-Type', 'application/json');
@@ -22,6 +23,7 @@ module.exports = function(app) {
 				if(erro){
 					res.setHeader('Content-Type', 'application/json');
 					res.end(JSON.stringify({ success : false, message:"Xiiiii deu zica!" + erro }));
+					return;
 				}
 
 				res.setHeader('Content-Type', 'application/json');

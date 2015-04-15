@@ -2,123 +2,56 @@
         <main class="container left-container">
             <div class="row">
 
-                <!-- Menu -->
-                <div id="menu-target">
-                    <ul>
-                        <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
-                        <li><i class="fa fa-user"></i><a href="author.html">John Smith</a></li>
-                        <li><i class="fa fa-anchor"></i><a href="page.html">About</a></li>
-                        <li><i class="fa fa-star"></i><a href="favorites.html">Favorites</a></li>
-                        <li><i class="fa fa-paper-plane"></i><a href="contact.html">Contact</a></li>
-                    </ul>
-                    <hr>
-                    <ul>
-                        <li><i class="fa fa-file"></i><a href="post.html">Post Page</a></li>
-                        <li><i class="fa fa-file"></i><a href="post-sidebar.html">Post with Sidebar</a></li>
+                <% include ../side_menu %>
 
-                        <li><i class="fa fa-home"></i><a href="alt-home.html">Alternate Home</a></li>
-                        <li><i class="fa fa-image"></i><a href="category.html">Category Page</a></li>
-                    </ul>
-                </div>
-                <!-- End Menu -->
+                <% include ../sidebar %>
 
-                <section class="sidebar col-md-5 col-sm-12" style="background-image: url(/public/images/default-sidebar.jpg)">
-
-                    <span class="menu-trigger animated fadeInDown">
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                    </span>
-
-                    <!-- if the user has javascript disabled they can still use the menu -->
-                    <noscript>
-                        <div class="no-js-menu">
-                            <ul>
-                                <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
-                                <li><i class="fa fa-user"></i><a href="author.html">John Smith</a></li>
-                                <li><i class="fa fa-anchor"></i><a href="page.html">About</a></li>
-                                <li><i class="fa fa-star"></i><a href="favorites.html">Favorites</a></li>
-                                <li><i class="fa fa-paper-plane"></i><a href="contact.html">Contact</a></li>
-                                <li><i class="fa fa-file"></i><a href="post.html">Post Page</a></li>
-                                <li><i class="fa fa-file"></i><a href="post-sidebar.html">Post with Sidebar</a></li>
-                                <li><i class="fa fa-home"></i><a href="alt-home.html">Alternate Home</a></li>
-                                <li><i class="fa fa-image"></i><a href="category.html">Category Page</a></li>
-                            </ul>
-                        </div>
-                    </noscript>
-                    <!-- end no script -->
-
-                    <div class="site-info">
-                        <div class="primary-info">
-                            <h1>IamFerraz</h1>
-                            <p>Where programming matter.</p>
-
-                            <p>Developed by André de Mattos Ferraz proudly using NodeJS and mongoDB</p>
-                        </div>
-                        <div class="secondary-info">
-                            <p>
-                                <a class="btn btn-primary" href="#"><i class="fa fa-linkedin-square"></i></a>
-
-                                <a class="btn btn-primary" href="#"><i class="fa fa-facebook-official"></i></a>
-                                
-                            </p>
-                        </div>
-                    </div>
-                </section><!-- end sidebar -->
-
-                <section class="col-md-7 col-sm-12 col-md-offset-5 main-content" ng-controller="HomeController as homeCtrl">
-
-                    <div class="sub-nav">
-                        <a href="#" class="select-posts active">Posts</a>
-                        <a href="#" class="select-categories">Categories</a>
+                <section ng-controller="HomeController as homeCtrl" class="col-md-7 col-sm-12 col-md-offset-5 main-content" role="tabpanel">
+                    <!-- Nav tabs -->
+                    <div class="sub-nav" role="tablist">
+                        <a href="#home-page-posts" class="select-posts active" role="tab" data-toggle="tab">Posts</a>
+                        <a href="#home-page-categories" class="select-categories" role="tab" data-toggle="tab">Categories</a>
                     </div>
 
-                    <div class="home-page-posts animated fadeIn" ng-init="getPosts()">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div ng-init="getPosts()" role="tabpanel" class="animated fadeIn tab-pane active" id="home-page-posts">
+                            <article class="post" ng-repeat="post in posts">
+                                <div class="post-preview col-xs-10  no-gutter">
+                                    <h2><a href="#{{post._id}}">{{post.title}}</a></h2>
 
-                        <article class="post" ng-repeat="post in posts">
-                            <div class="post-preview col-xs-10  no-gutter">
-                                <h2><a href="post.html">{{post.title}}</a></h2>
+                                    <p>{{post.text}}</p>
 
-                                <p>{{post.text}} </p>
-
-                                <p class="meta">
-                                    <a href="author.html">{{post.author}}y</a> in <a href="category.html">Storytime</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> {{post.created_date}}
-                                </p>
-                            </div>
-
-                            <div class=" col-xs-2  no-gutter">
-                                <img src="/public/images/profile-1.jpg" class="user-icon" alt="user-image">
-                            </div>
-                        </article>
-
-                        
-                    </div><!-- Home page posts -->
-
-                    <div class="home-page-categories hide animated fadeIn ">
-                        <div class="category row">
-                            <section>
-                                <div class="category-preview col-xs-6 col-sm-4 ">
-                                    <h2>Easy Living</h2>
-                                    <a href="category.html"><img src="/public/images/cover-2.jpg" alt="category-image"></a>
+                                    <p class="meta">
+                                        <a href="">{{post.author}}</a> in <a ng-repeat="category in post.category" href="{{category._id}}">{{category.name}}</a> <i class="link-spacer"></i> <i class="fa fa-bookmark"></i> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}
+                                    </p>
                                 </div>
 
-                                <div class="category-preview col-xs-6 col-sm-4 ">
-                                    <h2>Adventure</h2>
-                                    <a href="category.html"><img src="/public/images/cover-4.jpg" alt="category-image"></a>
+                                <div class=" col-xs-2  no-gutter">
+                                    <img src="/public/images/profile-1.jpg" class="user-icon" alt="user-image">
                                 </div>
+                            </article>
+                        </div>
+                        <div role="tabpanel" class="animated fadeIn tab-pane" id="home-page-categories">
+                            <div class="category row">
+                                <section>
+                                    <div class="category-preview col-xs-6 col-sm-4 ">
+                                        <h2>Easy Living</h2>
+                                        <a href="category.html"><img src="/public/images/cover-2.jpg" alt="category-image"></a>
+                                    </div>
 
-                            </section>
+                                    <div class="category-preview col-xs-6 col-sm-4 ">
+                                        <h2>Adventure</h2>
+                                        <a href="category.html"><img src="/public/images/cover-4.jpg" alt="category-image"></a>
+                                    </div>
+
+                                </section>
+                            </div>
                         </div>
                     </div>
+                </section>
 
-
-                    <footer class="split-footer">
-                        <a href="post.html">About</a>
-                        <i class="link-spacer"></i>
-                        <a href="post.html">Writer 2015</a>
-                    </footer>
-
-                </section><!-- main content -->
+                
 
             </div> <!--/row -->
 

@@ -2,40 +2,11 @@
         <main class="container left-container">
             <div class="row">
 
-                <!-- Menu -->
-                <div id="menu-target">
-                    <ul>
-                        <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
-                        <li><i class="fa fa-user"></i><a href="author.html">John Smith</a></li>
-                        <li><i class="fa fa-anchor"></i><a href="page.html">About</a></li>
-                        <li><i class="fa fa-star"></i><a href="favorites.html">Favorites</a></li>
-                        <li><i class="fa fa-paper-plane"></i><a href="contact.html">Contact</a></li>
-                    </ul>
-                    <hr>
-                    <ul>
-                        <li><i class="fa fa-file"></i><a href="post.html">Post Page</a></li>
-                        <li><i class="fa fa-file"></i><a href="post-sidebar.html">Post with Sidebar</a></li>
-
-                        <li><i class="fa fa-home"></i><a href="alt-home.html">Alternate Home</a></li>
-                        <li><i class="fa fa-image"></i><a href="category.html">Category Page</a></li>
-                    </ul>
-                </div>
-                <!-- End Menu -->
-
-                <span class="menu-trigger animated fadeInDown">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </span>
+                <% include ../side_menu_admin %>
 
                 <section class="main-content">
 
-                    <div class="sub-nav">
-                        <a href="#" class="select-posts active">Posts</a>
-                    </div>
-
-                    <div class="home-page-posts animated fadeIn">
-                    <div><!-- Home page posts -->
+                    <div ng-view></div>
 
                     <footer class="split-footer">
                         <i class="link-spacer"></i>
