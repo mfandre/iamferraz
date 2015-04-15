@@ -1926,7 +1926,7 @@ form input[type=submit]:hover {
 /* line 42, ../sass/main.sass */
 html,
 body {
-  font-size: 62.5%;
+  /*font-size: 62.5%;*/
 }
 @media (min-width: 992px) {
   /* line 42, ../sass/main.sass */
