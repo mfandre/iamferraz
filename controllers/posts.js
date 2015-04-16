@@ -19,6 +19,7 @@ module.exports = function(app) {
 			}
 			else
 			{
+				post.author = req.session.user;
 				Post.create(post, function(erro, post){
 					if(!erro){
 						app.sendResponse(res, true, false, post);
@@ -35,7 +36,7 @@ module.exports = function(app) {
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
-			});
+			}).populate('author').exec();
 		},
 		deletePost: function(req, res){
 			var id = req.body.id;
@@ -72,7 +73,7 @@ module.exports = function(app) {
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do post." + erro, post);
 				}
-			});
+			}).populate('author').exec();
 		}
 	};
 	return PostController;
