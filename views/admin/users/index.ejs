@@ -1,12 +1,72 @@
-<main class="container left-container">
-    <div class="row">
-
-        <div class="main-content">
-
+<div class="row" ng-controller="AdminUserController as userCtrl">
+    <div ng-init="getUsers()" class="animated fadeIn active" >
+        <div class="row">
             <h3>Usuários</h3>
+            <div class="bs-example">
+                <button ng-click="openCreateEditUserModal('Novo Usuário', null)" type="button" class="btn btn-primary">Novo</button>
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Avatar</th>
+                        <th>Data criação</th>
+                        <th>Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in users">
+                        <td>{{user._id}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td><img ng-src="{{user.avatar}}" width="50" /></td>
+                        <td>{{user.created_date | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                        <td><button ng-click="openCreateEditUserModal('Editar Usuário', user)" type="button" class="btn btn-primary">Editar</button><i class="link-spacer"></i><button ng-click="deleteUser(user._id)" type="button" class="btn btn-danger">Deletar</button></td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        </div><!-- main content -->
-    </div> <!--/row -->
+    <div class="modal fade" id="create-or-edit-user-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{modalTitle}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input ng-model="user.name" type="text" placeholder="Nome" class="form-control" name="name">
+                    </div>
 
-</main> <!-- /container -->
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                        <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                            <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" ng-model="user.avatar" name="avatar" accept="image/*" app-filereader></span>
+                            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input ng-model="user.email" type="text" placeholder="E-mail" class="form-control" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input ng-model="user.password" type="password" placeholder="Password" class="form-control" name="password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button ng-click="createSaveUser(user)" type="button" class="btn btn-default" value="Send">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--/row -->

@@ -1,5 +1,5 @@
 (function(){
-    var angularApp = angular.module('myApp', ['ngRoute','ngResource']);
+    var angularApp = angular.module('myApp', ['ngRoute','ngResource','colorpicker.module', 'wysiwyg.module','ngSanitize']);
 
     angularApp.config(function ($routeProvider) {
         $routeProvider
@@ -36,9 +36,7 @@
                 console.log("Notify ajax Erro");
                 // do something on error
                 $rootScope.$broadcast('ajax', false);
-                if (canRecover(rejection)) {
-                    return responseOrNewPromise
-                }
+
                 return $q.reject(rejection);
             }
         };
@@ -59,13 +57,54 @@
         };
     });
 
+    angularApp.directive('appFilereader', function($q) {
+        var slice = Array.prototype.slice;
+
+        return {
+            restrict: 'A',
+            require: '?ngModel',
+            link: function(scope, element, attrs, ngModel) {
+                    if (!ngModel) return;
+
+                    ngModel.$render = function() {};
+
+                    element.bind('change', function(e) {
+                        var element = e.target;
+
+                        $q.all(slice.call(element.files, 0).map(readFile))
+                            .then(function(values) {
+                                if (element.multiple) ngModel.$setViewValue(values);
+                                else ngModel.$setViewValue(values.length ? values[0] : null);
+                            });
+
+                        function readFile(file) {
+                            var deferred = $q.defer();
+
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                deferred.resolve(e.target.result);
+                            };
+                            reader.onerror = function(e) {
+                                deferred.reject(e);
+                            };
+                            reader.readAsDataURL(file);
+
+                            return deferred.promise;
+                        }
+
+                    }); //change
+
+                } //link
+        }; //return
+    });
+
 	angularApp.factory('postAjaxServices', function ($http) {
 	    return {
 			getPosts : function () {
 				return $http.post('/post/getPosts');
 			},
-			createPost : function (post) {
-				return $http.post('/post/createPost', {post:post});
+			createSavePost : function (post) {
+				return $http.post('/post/createSavePost', {post:post});
 			},
             deletePost : function (id) {
                 return $http.post('/post/deletePost', {id:id});
@@ -79,10 +118,25 @@
     	}
 	});
 
-    angularApp.factory('loginAjaxServices', function ($http) {
+    angularApp.factory('userAjaxServices', function ($http) {
         return {
             login : function (user) {
                 return $http.post('/user/Login', {user:user});
+            },
+            getUsers : function () {
+                return $http.post('/user/getUsers');
+            },
+            createSaveUser : function (user) {
+                return $http.post('/user/createSaveUser', {user:user});
+            },
+            deleteUser : function (id) {
+                return $http.post('/user/deleteUser', {id:id});
+            },
+            editUser : function (user) {
+                return $http.post('/user/editUser', {user:user});
+            },
+            getUser : function (id) {
+                return $http.post('/user/getUser', {id:id});
             }
         }
     });
@@ -116,13 +170,33 @@
     angularApp.controller("AdminPostController", function($scope, $filter, postAjaxServices){
         $scope.post = {};
         $scope.posts = [];
-        
-        $scope.createPost = function(post){
-        	postAjaxServices.createPost(post)
+        $scope.modalTitle = "";
+        $scope.wysiwygMenu = [
+            ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript'],
+            ['format-block'],
+            ['font'],
+            ['font-size'],
+            ['font-color', 'hilite-color'],
+            ['remove-format'],
+            ['ordered-list', 'unordered-list', 'outdent', 'indent'],
+            ['left-justify', 'center-justify', 'right-justify'],
+            ['code', 'quote', 'paragraph'],
+            ['link', 'image']
+        ];
+
+        $scope.openCreateEditPostModal = function(title, post){
+            $scope.modalTitle = title;
+            $scope.post = post;
+            $("#create-or-edit-post-modal").modal("show");
+        }
+
+        $scope.createSavePost = function(post){
+        	postAjaxServices.createSavePost(post)
         		.success(function(data, status, headers, config) {
                     console.log("craetePost Request feita:");
                     console.log(data);
-                    $scope.posts.push(data.data);
+                    if(data.success && !data.message)
+                        $scope.posts.push(data.data);
                 })
                 .error(function(data, status, headers, config) {
                     console.log("createPost Request deu zica!:");
@@ -179,8 +253,87 @@
         }
     });
 
-    angularApp.controller("HomeController", function($scope, postAjaxServices){
+    angularApp.controller("AdminUserController", function($scope, $filter, userAjaxServices){
+        $scope.user = {};
+        $scope.users = [];
+        $scope.modalTitle = "";
+        
+        $scope.openCreateEditUserModal = function(title, user){
+            $scope.modalTitle = title;
+            $scope.user = user;
+            $("#create-or-edit-user-modal").modal("show");
+
+        }
+
+        $scope.createSaveUser = function(user){
+            userAjaxServices.createSaveUser(user)
+                .success(function(data, status, headers, config) {
+                    console.log("craeteUser Request feita:");
+                    console.log(data);
+                    if(data.success && !data.message)
+                        $scope.users.push(data.data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("createUser Request deu zica!:");
+                });
+        }
+
+        $scope.getUsers = function(){
+            userAjaxServices.getUsers()
+                .success(function(data, status, headers, config) {
+                    console.log("getUsers Request feita:");
+                    console.log(data);
+                    if(data.success)
+                        $scope.users = data.data;
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getUsers Request deu zica!:");
+                });
+        }
+
+        $scope.deleteUser = function(id){
+            userAjaxServices.deleteUser(id)
+                .success(function(data, status, headers, config) {
+                    console.log("deleteUser Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("deleteUser Request deu zica!:");
+                });
+
+            //removendo user do array de users
+            $scope.users = $filter('filter')($scope.users, {_id: '!' + id})
+        }
+
+        $scope.editUser = function(user){
+            userAjaxServices.editUser(user)
+                .success(function(data, status, headers, config) {
+                    console.log("editUser Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("editUser Request deu zica!:");
+                });
+        }
+
+        $scope.getUser = function(id){
+            userAjaxServices.getUser(id)
+                .success(function(data, status, headers, config) {
+                    console.log("getUser Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getUser Request deu zica!:");
+                });
+        }
+    });
+
+    angularApp.controller("HomeController", function($scope,$sce, postAjaxServices){
         $scope.posts = [];
+
+        $scope.convertHtml = function(text) {
+            return $sce.trustAsHtml(text);
+        };
 
         $scope.getPosts = function(){
         	postAjaxServices.getPosts()
@@ -196,11 +349,11 @@
         }
     });
 
-    angularApp.controller("LoginController", function($scope, loginAjaxServices){
+    angularApp.controller("LoginController", function($scope, userAjaxServices){
         $scope.user = {};
 
         $scope.login = function(user){
-            loginAjaxServices.login(user)
+            userAjaxServices.login(user)
                 .success(function(data, status, headers, config) {
                     console.log("login Request feita:");
                     console.log(data);
@@ -208,7 +361,8 @@
                         window.location = '/admin/portal';
                 })
                 .error(function(data, status, headers, config) {
-                    console.log("getPosts Request deu zica!:");
+                    console.log("login Request deu zica!:");
+                    console.log(data);
                 });
         }
     });

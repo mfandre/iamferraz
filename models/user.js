@@ -5,6 +5,7 @@ module.exports = function(app) {
 		name			: {type: String, required: true},
 		email			: {type: String, required: true},
 		password		: {type: String, required: true},
+		avatar			: String,
 		created_date	: {type: Date, default: Date.now }
 	});
 

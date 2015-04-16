@@ -1,0 +1,3 @@
+bibliotecas utilizadas:
+https://github.com/buberdds/angular-bootstrap-colorpicker
+https://github.com/TerryMooreII/angular-wysiwyg
