@@ -28,7 +28,7 @@ module.exports = function(app) {
 		createSaveUser: function(req, res){
 			var user = req.body.user;
 			//console.log(JSON.stringify(req.body));
-			console.log(JSON.stringify(user));
+			//console.log(JSON.stringify(user));
 
 			if (user._id){
 				User.findByIdAndUpdate(user._id, { $set: user }, function (erro, user) {
@@ -75,7 +75,7 @@ module.exports = function(app) {
 		},
 		editUser: function(req, res){
 			var user = req.body.user;
-			console.log(JSON.stringify(user));
+			//console.log(JSON.stringify(user));
 			User.findByIdAndUpdate(id, { $set: user }, function (erro, user) {
 				if (!erro) {
 					app.sendResponse(res, true, true, user);

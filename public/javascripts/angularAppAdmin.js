@@ -1,5 +1,5 @@
 (function(){
-    var angularApp = angular.module('myApp', ['ngRoute','ngResource','colorpicker.module', 'wysiwyg.module','ngSanitize']);
+    var angularApp = angular.module('myApp', ['ngRoute','ngResource','colorpicker.module', 'wysiwyg.module', 'ngTagsInput','ngSanitize']);
 
     angularApp.config(function ($routeProvider) {
         $routeProvider
@@ -141,6 +141,26 @@
         }
     });
 
+    angularApp.factory('categoryAjaxServices', function ($http) {
+        return {
+            getCategories : function () {
+                return $http.post('/category/getCategories');
+            },
+            createSaveCategory : function (category) {
+                return $http.post('/category/createSaveCategory', {category:category});
+            },
+            deleteCategory : function (id) {
+                return $http.post('/category/deleteCategory', {id:id});
+            },
+            editCategory : function (category) {
+                return $http.post('/category/editCategory', {category:category});
+            },
+            getCategory : function (id) {
+                return $http.post('/category/getCategory', {id:id});
+            }
+        }
+    });
+
     angularApp.controller("MenuController", function($scope){
         $scope.jpm = {};
         // Fast Click for Mobile - removes 300ms delay - https://github.com/ftlabs/fastclick
@@ -167,9 +187,10 @@
         $scope.jpm.on();
     });
 
-    angularApp.controller("AdminPostController", function($scope, $filter, postAjaxServices){
+    angularApp.controller("AdminPostController", function($scope, $filter, postAjaxServices, categoryAjaxServices){
         $scope.post = {};
         $scope.posts = [];
+        $scope.categories = [];
         $scope.modalTitle = "";
         $scope.wysiwygMenu = [
             ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript'],
@@ -251,6 +272,23 @@
                     console.log("getPost Request deu zica!:");
                 });
         }
+
+        $scope.getCategories = function(){
+            categoryAjaxServices.getCategories()
+                .success(function(data, status, headers, config) {
+                    console.log("getCategories Request feita:");
+                    console.log(data);
+                    if(data.success)
+                        $scope.categories = data.data;
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getCategories Request deu zica!:");
+                });
+        }
+
+        $scope.loadCategory = function(query){
+            return $filter('filter')($scope.categories, {name: query})
+        }
     });
 
     angularApp.controller("AdminUserController", function($scope, $filter, userAjaxServices){
@@ -328,8 +366,84 @@
         }
     });
 
-    angularApp.controller("HomeController", function($scope,$sce, postAjaxServices){
+    angularApp.controller("AdminCategoryController", function($scope, $filter, categoryAjaxServices){
+        $scope.category = {};
+        $scope.categories = [];
+        $scope.modalTitle = "";
+        
+        $scope.openCreateEditCategoryModal = function(title, category){
+            $scope.modalTitle = title;
+            $scope.category = category;
+            $("#create-or-edit-category-modal").modal("show");
+
+        }
+
+        $scope.createSaveCategory = function(category){
+            categoryAjaxServices.createSaveCategory(category)
+                .success(function(data, status, headers, config) {
+                    console.log("craeteCategory Request feita:");
+                    console.log(data);
+                    if(data.success && !data.message)
+                        $scope.categories.push(data.data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("createCategory Request deu zica!:");
+                });
+        }
+
+        $scope.getCategories = function(){
+            categoryAjaxServices.getCategories()
+                .success(function(data, status, headers, config) {
+                    console.log("getCategories Request feita:");
+                    console.log(data);
+                    if(data.success)
+                        $scope.categories = data.data;
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getCategories Request deu zica!:");
+                });
+        }
+
+        $scope.deleteCategory = function(id){
+            categoryAjaxServices.deleteCategory(id)
+                .success(function(data, status, headers, config) {
+                    console.log("deleteCategory Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("deleteCategory Request deu zica!:");
+                });
+
+            //removendo Category do array de Categories
+            $scope.categories = $filter('filter')($scope.categories, {_id: '!' + id})
+        }
+
+        $scope.editCategory = function(category){
+            categoryAjaxServices.editCategory(category)
+                .success(function(data, status, headers, config) {
+                    console.log("editCategory Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("editCategory Request deu zica!:");
+                });
+        }
+
+        $scope.getCategory = function(id){
+            categoryAjaxServices.getCategory(id)
+                .success(function(data, status, headers, config) {
+                    console.log("getCategory Request feita:");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getCategory Request deu zica!:");
+                });
+        }
+    });
+
+    angularApp.controller("HomeController", function($scope,$sce, postAjaxServices, categoryAjaxServices){
         $scope.posts = [];
+        $scope.categories = [];
 
         $scope.convertHtml = function(text) {
             return $sce.trustAsHtml(text);
@@ -345,6 +459,19 @@
                 })
                 .error(function(data, status, headers, config) {
                     console.log("getPosts Request deu zica!:");
+                });
+        }
+
+        $scope.getCategories = function(){
+            categoryAjaxServices.getCategories()
+                .success(function(data, status, headers, config) {
+                    console.log("getCategories Request feita:");
+                    console.log(data);
+                    if(data.success)
+                        $scope.categories = data.data;
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("getCategories Request deu zica!:");
                 });
         }
     });

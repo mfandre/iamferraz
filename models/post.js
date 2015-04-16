@@ -7,18 +7,13 @@ module.exports = function(app) {
 		comment 		: {type: String, required: true}
 	});
 
-	var category = Schema({
-		name			: {type: String, required: true, index: {unique: true, sparse: true}},
-		created_date	: { type: Date, default: Date.now }
-	});
-
 	var post = Schema({
 		title			: {type: String, required: true},
 		text			: {type: String, required: true},
 		created_date	: {type: Date, default: Date.now },
 		author			: {type: Schema.Types.ObjectId, ref: 'user'}, //{type: String, required: true},
 		comments		: [comment],
-		category		: [category]
+		category		: [{type: Schema.Types.ObjectId, ref: 'category'}]
 	});
 
 	return db.model('post', post);

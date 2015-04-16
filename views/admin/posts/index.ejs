@@ -1,5 +1,5 @@
 <div class="row" ng-controller="AdminPostController as postCtrl">
-    <div ng-init="getPosts()" class="animated fadeIn active" >
+    <div ng-init="getPosts();getCategories()" class="animated fadeIn active" >
         <div class="row">
             <h3>Posts</h3>
             <div class="bs-example">
@@ -37,8 +37,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="title">Title</label>
+                        <label for="title">Título</label>
                         <input ng-model="post.title" type="text" placeholder="Title" class="form-control" name="title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categories">Categorias</label>
+                        <tags-input ng-model="post.category" display-property="name">
+                            <auto-complete min-length="1" source="loadCategory($query)"></auto-complete>
+                        </tags-input>
                     </div>
 
                     <div class="form-group">
