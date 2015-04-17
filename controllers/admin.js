@@ -1,7 +1,11 @@
 module.exports = function(app) {
 	var AdminController = {
 		index: function(req, res) {
-			res.render('admin/index');
+			if (req.session.user == undefined || req.session.user == null) {  
+				res.render('admin/index');
+			}else{
+				res.render('admin/portal');
+			}
 		},
 		portal: function(req, res) {
 			res.render('admin/portal');
