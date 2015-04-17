@@ -27,6 +27,27 @@
     });
 
     //configurando rotas do Blog
+    angularAppBlog.config(function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/posts");
+
+        $stateProvider
+            .state('posts', {
+                url: "/posts",
+                templateUrl: "/posts"
+            })
+            .state('post', {
+                url: "/post",
+                templateUrl: "/post"
+            })
+            .state('contact', {
+                url: "/contact",
+                templateUrl: "/contact"
+            })
+            .state('resume', {
+                url: "/resume",
+                templateUrl: "/resume"
+            });
+    });
 
     //configurando interceptor de requisicoes ajax na aplicacao Admin
     angularAppAdmin.config(function ($httpProvider) {
@@ -366,12 +387,16 @@
         }
     });
 
-    angularAppBlog.controller("HomeController", function($scope,$sce, postAjaxServices, categoryAjaxServices){
+    angularAppBlog.controller("HomeController", function($scope,$sce,$filter, postAjaxServices, categoryAjaxServices){
         $scope.posts = [];
         $scope.categories = [];
 
+        $scope.openPost = function(post){
+            angularAppBlog.selectedPost = post;
+        };
+
         $scope.convertHtml = function(text) {
-            return $sce.trustAsHtml(text);
+            return $sce.trustAsHtml($filter('limitTo')(text, 400) + "...");
         };
 
         $scope.getPosts = function(){
@@ -385,7 +410,7 @@
                 .error(function(data, status, headers, config) {
                     console.log("getPosts Request deu zica!:");
                 });
-        }
+        };
 
         $scope.getCategories = function(){
             categoryAjaxServices.getCategories()
@@ -398,7 +423,20 @@
                 .error(function(data, status, headers, config) {
                     console.log("getCategories Request deu zica!:");
                 });
-        }
+        };
+    });
+
+    angularAppBlog.controller("PostController", function($scope,$sce, $window){
+        $scope.post = angularAppBlog.selectedPost;
+
+        $scope.convertHtml = function(text) {
+            return $sce.trustAsHtml(text);
+        };
+
+        $scope.goBack = function(){
+            $window.history.back();
+        };
+        
     });
 
 })();

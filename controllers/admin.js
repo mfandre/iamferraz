@@ -12,7 +12,7 @@ module.exports = function(app) {
 		},
 		partials: function(req, res) {
 			var name = req.params.name;
-			console.log("chamou partials! "+ name);
+			console.log("admin chamou partials! "+ name);
 			res.render('admin/' + name + '/index');
 		}
 	};

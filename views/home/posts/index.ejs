@@ -1,0 +1,38 @@
+<section ng-controller="HomeController as homeCtrl" ng-init="getPosts();getCategories();" class="col-md-7 col-sm-12 col-md-offset-5 main-content" role="tabpanel">
+    <!-- Nav tabs -->
+    <div class="sub-nav" role="tablist">
+        <a href="#home-page-posts" class="select-posts active" role="tab" data-toggle="tab">Posts</a>
+        <a href="#home-page-categories" class="select-categories" role="tab" data-toggle="tab">Categories</a>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="animated fadeIn tab-pane active" id="home-page-posts">
+            <article class="post" ng-repeat="post in posts">
+                <div class="post-preview col-xs-10  no-gutter">
+                    <h2><a ng-click="openPost(post)" ui-sref="post">{{post.title}}</a></h2>
+
+                    <p ng-bind-html="convertHtml(post.text)"></p>
+
+                    <p class="meta">
+                        <a href="">{{post.author.name}}</a> in <span ng-repeat="category in post.category"><a href="#{{category._id}}">{{category.name}}</a> <i class="link-spacer"></i></span> <i class="fa fa-bookmark"></i> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}
+                    </p>
+                </div>
+
+                <div class=" col-xs-2  no-gutter">
+                    <img ng-src="{{post.author.avatar}}" class="user-icon" alt="user-image">
+                </div>
+            </article>
+        </div>
+        <div role="tabpanel" class="animated fadeIn tab-pane" id="home-page-categories">
+            <div class="category row">
+                <section>
+                    <div ng-repeat="category in categories" class="category-preview col-xs-6 col-sm-4 ">
+                        <h2>{{category.name}}</h2>
+                        <a href="#{{category._id}}"><img ng-src="{{category.image}}" alt="category-image"></a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
