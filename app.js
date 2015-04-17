@@ -43,9 +43,10 @@ app.isAuthenticated = function (req,res,next){
   return next();
 };
 
-app.sendResponse = function(res, success, message, data){
+app.sendResponse = function(res, success, message, data, config){
+  config = typeof config !== 'undefined' ? config : {showNoty:true};
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ success : success, message:message, data : data}));
+  res.end(JSON.stringify({ success : success, message:message, data : data, config: config}));
 };
 
 load('models')

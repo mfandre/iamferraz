@@ -5,12 +5,12 @@ module.exports = function(app) {
 		createSavePost: function(req, res){
 			var post = req.body.post;
 			//console.log(JSON.stringify(req.body));
-			console.log(JSON.stringify(post));
+			//console.log(JSON.stringify(post));
 
 			if (post._id){
 				Post.findByIdAndUpdate(post._id, { $set: post }, function (erro, post) {
 					if (!erro) {
-						app.sendResponse(res, true, true, post);
+						app.sendResponse(res, true, "Post alterado com sucesso.", post, {modified : true});
 					}
 					else {
 						app.sendResponse(res, false, "Xiiiii deu zica! Edição do post.", post);
@@ -22,7 +22,7 @@ module.exports = function(app) {
 				post.author = req.session.user;
 				Post.create(post, function(erro, post){
 					if(!erro){
-						app.sendResponse(res, true, false, post);
+						app.sendResponse(res, true, "Post criado com sucesso.", post, {modified : false});
 					}else{
 						app.sendResponse(res, false, "Xiiiii deu zica! Criação do post.", post);
 					}
@@ -32,7 +32,7 @@ module.exports = function(app) {
 		getPosts: function(req, res){
 			Post.find({}, function(erro, posts) {
 				if(!erro){
-					app.sendResponse(res, true, "Retornando todos os Posts!", posts);
+					app.sendResponse(res, true, "Retornando todos os Posts!", posts, {showNoty: false});
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
@@ -53,10 +53,10 @@ module.exports = function(app) {
 		},
 		editPost: function(req, res){
 			var post = req.body.post;
-			console.log(JSON.stringify(post));
+			//console.log(JSON.stringify(post));
 			Post.findByIdAndUpdate(id, { $set: post }, function (erro, post) {
 				if (!erro) {
-					app.sendResponse(res, true, true, post);
+					app.sendResponse(res, true, "Post alterado com sucesso.", post, {modified : true});
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, post);

@@ -27,13 +27,28 @@
     angularApp.factory('ajaxInterceptor', function($q, $rootScope) {
         return {
             'response': function(response) {
-                console.log("Notify ajax Sucesso");
+                //console.log("Notify ajax Sucesso");
+                //console.log(response);
+
+                if(response.data.success !== null || response.data.success !== undefined){
+                    if(response.data.success == true){
+                        if(response.data.config && response.data.config.showNoty != false)
+                            noty({ text: response.data.message,type: 'success'});
+                    }
+                    else if(response.data.success == false){
+                        noty({ text: response.data.message,type: 'error'});
+                    }
+                }
+
                 // do something on success
                 $rootScope.$broadcast('ajax', false);
                 return response;
             },
             'responseError': function(rejection) {
-                console.log("Notify ajax Erro");
+                //console.log("Notify ajax Erro");
+
+                noty({ text: "Vixeeee servidor nao respondeu como deveria... FDP!!!",type: 'error'});
+
                 // do something on error
                 $rootScope.$broadcast('ajax', false);
 
@@ -173,6 +188,7 @@
                 menu : '#menu-target',
                 trigger: '.menu-trigger',
                 animated: false,
+                keyboardShortcuts: false,
                 beforeOpen : ( function() {
                     if (matchMedia('only screen and (min-width: 992px)').matches) {
                         $('.sidebar').css("left", "250px");
@@ -214,75 +230,40 @@
         $scope.createSavePost = function(post){
         	postAjaxServices.createSavePost(post)
         		.success(function(data, status, headers, config) {
-                    console.log("craetePost Request feita:");
-                    console.log(data);
-                    if(data.success && !data.message)
+                    if(data.success && !data.config.modified)
                         $scope.posts.push(data.data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("createPost Request deu zica!:");
                 });
         }
 
         $scope.getPosts = function(){
             postAjaxServices.getPosts()
                 .success(function(data, status, headers, config) {
-                    console.log("getPosts Request feita:");
-                    console.log(data);
                     if(data.success)
                         $scope.posts = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getPosts Request deu zica!:");
                 });
         }
 
         $scope.deletePost = function(id){
             postAjaxServices.deletePost(id)
                 .success(function(data, status, headers, config) {
-                    console.log("deletePost Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("deletePost Request deu zica!:");
+                    //removendo post do array de posts
+                    $scope.posts = $filter('filter')($scope.posts, {_id: '!' + id})
                 });
-
-            //removendo post do array de posts
-            $scope.posts = $filter('filter')($scope.posts, {_id: '!' + id})
         }
 
         $scope.editPost = function(post){
-            postAjaxServices.editPost(post)
-                .success(function(data, status, headers, config) {
-                    console.log("editPost Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("editPost Request deu zica!:");
-                });
+            postAjaxServices.editPost(post);
         }
 
         $scope.getPost = function(id){
-            postAjaxServices.getPost(id)
-                .success(function(data, status, headers, config) {
-                    console.log("getPost Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getPost Request deu zica!:");
-                });
+            postAjaxServices.getPost(id);
         }
 
         $scope.getCategories = function(){
             categoryAjaxServices.getCategories()
                 .success(function(data, status, headers, config) {
-                    console.log("getCategories Request feita:");
-                    console.log(data);
                     if(data.success)
                         $scope.categories = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getCategories Request deu zica!:");
                 });
         }
 
@@ -306,63 +287,33 @@
         $scope.createSaveUser = function(user){
             userAjaxServices.createSaveUser(user)
                 .success(function(data, status, headers, config) {
-                    console.log("craeteUser Request feita:");
-                    console.log(data);
-                    if(data.success && !data.message)
+                    if(data.success && !data.config.modified)
                         $scope.users.push(data.data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("createUser Request deu zica!:");
                 });
         }
 
         $scope.getUsers = function(){
             userAjaxServices.getUsers()
                 .success(function(data, status, headers, config) {
-                    console.log("getUsers Request feita:");
-                    console.log(data);
                     if(data.success)
                         $scope.users = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getUsers Request deu zica!:");
                 });
         }
 
         $scope.deleteUser = function(id){
             userAjaxServices.deleteUser(id)
                 .success(function(data, status, headers, config) {
-                    console.log("deleteUser Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("deleteUser Request deu zica!:");
+                    //removendo user do array de users
+                    $scope.users = $filter('filter')($scope.users, {_id: '!' + id})
                 });
-
-            //removendo user do array de users
-            $scope.users = $filter('filter')($scope.users, {_id: '!' + id})
         }
 
         $scope.editUser = function(user){
-            userAjaxServices.editUser(user)
-                .success(function(data, status, headers, config) {
-                    console.log("editUser Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("editUser Request deu zica!:");
-                });
+            userAjaxServices.editUser(user);
         }
 
         $scope.getUser = function(id){
-            userAjaxServices.getUser(id)
-                .success(function(data, status, headers, config) {
-                    console.log("getUser Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getUser Request deu zica!:");
-                });
+            userAjaxServices.getUser(id);
         }
     });
 
@@ -381,63 +332,33 @@
         $scope.createSaveCategory = function(category){
             categoryAjaxServices.createSaveCategory(category)
                 .success(function(data, status, headers, config) {
-                    console.log("craeteCategory Request feita:");
-                    console.log(data);
-                    if(data.success && !data.message)
+                    if(data.success && !data.config.modified)
                         $scope.categories.push(data.data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("createCategory Request deu zica!:");
                 });
         }
 
         $scope.getCategories = function(){
             categoryAjaxServices.getCategories()
                 .success(function(data, status, headers, config) {
-                    console.log("getCategories Request feita:");
-                    console.log(data);
                     if(data.success)
                         $scope.categories = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getCategories Request deu zica!:");
                 });
         }
 
         $scope.deleteCategory = function(id){
             categoryAjaxServices.deleteCategory(id)
                 .success(function(data, status, headers, config) {
-                    console.log("deleteCategory Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("deleteCategory Request deu zica!:");
+                    //removendo Category do array de Categories
+                    $scope.categories = $filter('filter')($scope.categories, {_id: '!' + id})
                 });
-
-            //removendo Category do array de Categories
-            $scope.categories = $filter('filter')($scope.categories, {_id: '!' + id})
         }
 
         $scope.editCategory = function(category){
-            categoryAjaxServices.editCategory(category)
-                .success(function(data, status, headers, config) {
-                    console.log("editCategory Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("editCategory Request deu zica!:");
-                });
+            categoryAjaxServices.editCategory(category);
         }
 
         $scope.getCategory = function(id){
-            categoryAjaxServices.getCategory(id)
-                .success(function(data, status, headers, config) {
-                    console.log("getCategory Request feita:");
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getCategory Request deu zica!:");
-                });
+            categoryAjaxServices.getCategory(id);
         }
     });
 

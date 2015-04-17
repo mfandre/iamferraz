@@ -33,7 +33,7 @@ module.exports = function(app) {
 			if (user._id){
 				User.findByIdAndUpdate(user._id, { $set: user }, function (erro, user) {
 					if (!erro) {
-						app.sendResponse(res, true, true, user);
+						app.sendResponse(res, true, "Usuário alterado com sucesso", user, {modified : true});
 					}
 					else {
 						app.sendResponse(res, false, "Xiiiii deu zica! Edição do user." + erro, user);
@@ -44,7 +44,7 @@ module.exports = function(app) {
 			{
 				User.create(user, function(erro, user){
 					if(!erro){
-						app.sendResponse(res, true, false, user);
+						app.sendResponse(res, true, "Usuário criado com sucesso.", user, {modified : false});
 					}else{
 						app.sendResponse(res, false, "Xiiiii deu zica! Criação do user." + erro, user);
 					}
@@ -54,7 +54,7 @@ module.exports = function(app) {
 		getUsers: function(req, res){
 			User.find({}, function(erro, users) {
 				if(!erro){
-					app.sendResponse(res, true, "Retornando todos os users!", users);
+					app.sendResponse(res, true, "Retornando todos os users!", users, {showNoty: false});
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os users." + erro, users);
 				}
@@ -66,7 +66,7 @@ module.exports = function(app) {
 
 			User.remove({ _id: id }, function(erro) {
 				if (!erro) {
-					app.sendResponse(res, true, "User deletado!", id);
+					app.sendResponse(res, true, "Usuário deletado!", id);
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Deletar user." + erro, id);
@@ -78,7 +78,7 @@ module.exports = function(app) {
 			//console.log(JSON.stringify(user));
 			User.findByIdAndUpdate(id, { $set: user }, function (erro, user) {
 				if (!erro) {
-					app.sendResponse(res, true, true, user);
+					app.sendResponse(res, true, "Usuário alterado com sucesso.", user, {modified : true});
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os user." + erro, user);
@@ -90,7 +90,7 @@ module.exports = function(app) {
 			console.log(JSON.stringify(id));
 			User.findById(id, function (erro, user) {
 				if (!erro) {
-					app.sendResponse(res, true, "User encontrado!", user);
+					app.sendResponse(res, true, "Usuário encontrado!", user);
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do user." + erro, user);

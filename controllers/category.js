@@ -33,7 +33,7 @@ module.exports = function(app) {
 			if (category._id){
 				Category.findByIdAndUpdate(category._id, { $set: category }, function (erro, category) {
 					if (!erro) {
-						app.sendResponse(res, true, true, category);
+						app.sendResponse(res, true, "Categoria alterada com sucesso.", category, {modified : true});
 					}
 					else {
 						app.sendResponse(res, false, "Xiiiii deu zica! Edição do category." + erro, category);
@@ -44,7 +44,7 @@ module.exports = function(app) {
 			{
 				Category.create(category, function(erro, category){
 					if(!erro){
-						app.sendResponse(res, true, false, category);
+						app.sendResponse(res, true, "Categoria criada com sucesso.", category, {modified : false});
 					}else{
 						app.sendResponse(res, false, "Xiiiii deu zica! Criação do category." + erro, category);
 					}
@@ -54,7 +54,7 @@ module.exports = function(app) {
 		getCategories: function(req, res){
 			Category.find({}, function(erro, categories) {
 				if(!erro){
-					app.sendResponse(res, true, "Retornando todos os categories!", categories);
+					app.sendResponse(res, true, "Retornando todos os categories!", categories, {showNoty: false});
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os categories." + erro, categories);
 				}
@@ -66,7 +66,7 @@ module.exports = function(app) {
 
 			Category.remove({ _id: id }, function(erro) {
 				if (!erro) {
-					app.sendResponse(res, true, "Category deletado!", id);
+					app.sendResponse(res, true, "Categoria deletada!", id);
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Deletar category." + erro, id);
@@ -78,7 +78,7 @@ module.exports = function(app) {
 			//console.log(JSON.stringify(category));
 			Category.findByIdAndUpdate(id, { $set: category }, function (erro, category) {
 				if (!erro) {
-					app.sendResponse(res, true, true, category);
+					app.sendResponse(res, true, "Categoria alterada com sucesso.", category, {modified : true});
 				}
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os category." + erro, category);
