@@ -9,7 +9,7 @@
 
     //configurando rotas do Admin
     angularAppAdmin.config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("admin/portal/posts");
+        $urlRouterProvider.otherwise("/admin");
 
         $stateProvider
             .state('posts', {
@@ -357,7 +357,7 @@
                     console.log("login Request feita:");
                     console.log(data);
                     if(data.success)
-                        window.location = '/admin/portal';
+                        window.location = '/admin';
                 })
                 .error(function(data, status, headers, config) {
                     console.log("login Request deu zica!:");
