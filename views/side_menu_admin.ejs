@@ -1,19 +1,15 @@
 <!-- Menu -->
-<div id="menu-target" ng-controller="MenuController as menuCtrl">
+<nav id="menu" class="panel" role="navigation" ng-controller="MenuController as menuCtrl">
     <ul>
-        <li><i class="fa fa-home"></i><a href="#/posts">Posts</a></li>
-        <li><i class="fa fa-anchor"></i><a href="#/categories">Categorias</a></li>
-        <li><i class="fa fa-user"></i><a href="#/users">Usuários</a></li>
+        <li><i class="fa fa-home"></i><a ui-sref="posts">Posts</a></li>
+        <li><i class="fa fa-anchor"></i><a ui-sref="categories">Categorias</a></li>
+        <li><i class="fa fa-user"></i><a ui-sref="users">Usuários</a></li>
     </ul>
     <hr>
     <ul>
         <li><i class="fa fa-close"></i><a href="/user/logout">Sair</a></li>
     </ul>
-</div>
+</nav>
 <!-- End Menu -->
 
-<span class="menu-trigger animated fadeInDown">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-</span>
+

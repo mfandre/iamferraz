@@ -1,4 +1,17 @@
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Droid+Serif:400,400italic,700);
+
+.panel {
+    position: fixed;
+    left: -15.625em; /*or width of your navigation panel*/
+    width: 15.625em; /*should match the above value*/
+    background-color: #333337;
+}
+
+.wrap {
+    position: relative;
+}
+
+
 /* line 12, ../sass/_type.sass */
 body {
   line-height: 1.65;
@@ -854,23 +867,23 @@ ol li {
 }
 
 /* line 12, ../sass/partials/_menu.sass */
-#jPanelMenu-menu {
+#menu {
   background-color: #333337;
   overflow: hidden;
   overflow-y: hidden !important;
 }
 /* line 17, ../sass/partials/_menu.sass */
-#jPanelMenu-menu ul {
+#menu ul {
   padding: 10px 0;
 }
 /* line 20, ../sass/partials/_menu.sass */
-#jPanelMenu-menu li {
+#menu li {
   margin: 0;
   padding: 10px 0;
   list-style: none;
 }
 /* line 25, ../sass/partials/_menu.sass */
-#jPanelMenu-menu li i {
+#menu li i {
   padding: 0 20px;
   color: #DADADA;
   font-style: normal;
@@ -878,7 +891,7 @@ ol li {
   font-size: 1.4rem;
 }
 /* line 30, ../sass/partials/_menu.sass */
-#jPanelMenu-menu li a {
+#menu li a {
   color: #DADADA;
   font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   font-weight: 700;
@@ -887,12 +900,12 @@ ol li {
   font-size: 1.2rem;
 }
 /* line 37, ../sass/partials/_menu.sass */
-#jPanelMenu-menu li a:hover {
+#menu li a:hover {
   border-bottom: none;
   color: #fff;
 }
 /* line 40, ../sass/partials/_menu.sass */
-#jPanelMenu-menu hr {
+#menu hr {
   margin: 20px auto;
   width: 40%;
 }

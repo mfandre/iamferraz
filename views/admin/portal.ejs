@@ -1,12 +1,17 @@
-<% include ../header %>
+<% include ../header_admin %>
         <main class="container left-container">
             <div class="row">
 
                 <% include ../side_menu_admin %>
 
-                <section class="main-content">
+                <section class="main-content push wrap">
+                    <a class="menu-trigger" href="#menu">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </a>
 
-                    <div ng-view></div>
+                    <div ui-view></div>
 
                     <footer class="split-footer">
                         <i class="link-spacer"></i>

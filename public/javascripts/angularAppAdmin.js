@@ -1,67 +1,39 @@
 (function(){
-    var angularApp = angular.module('myApp', ['ngRoute','ngResource','colorpicker.module', 'wysiwyg.module', 'ngTagsInput','ngSanitize']);
+    angular.module('myAppCommon.Directives', []);
+    angular.module('myAppCommon.Factories', []);
+    angular.module('myAppCommon.Controllers', []);
 
-    angularApp.config(function ($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'portal/posts',
-                //controller: "LoginController"
+    var angularAppAdmin = angular.module('myAppAdmin', ['ui.router','ngResource','colorpicker.module','wysiwyg.module','ngTagsInput','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
+
+    var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
+
+    //configurando rotas do Admin
+    angularAppAdmin.config(function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("admin/portal/posts");
+
+        $stateProvider
+            .state('posts', {
+                url: "admin/portal/posts",
+                templateUrl: "admin/portal/posts"
             })
-            .when('/posts', {
-                templateUrl: 'portal/posts',
-                //controller: "ChatController"
+            .state('users', {
+                url: "admin/portal/users",
+                templateUrl: "admin/portal/users"
             })
-            .when('/users', {
-                templateUrl: 'portal/users',
-                //controller: "ProfileController"
-            })
-            .when('/categories', {
-                templateUrl: 'portal/categories',
-                //controller: "ProfileController"
-            })
-            .otherwise({
-                redirectTo: '/admin'
+            .state('categories', {
+                url: "admin/portal/categories",
+                templateUrl: "admin/portal/categories"
             });
     });
 
-    angularApp.factory('ajaxInterceptor', function($q, $rootScope) {
-        return {
-            'response': function(response) {
-                //console.log("Notify ajax Sucesso");
-                //console.log(response);
+    //configurando rotas do Blog
 
-                if(response.data.success !== null || response.data.success !== undefined){
-                    if(response.data.success == true){
-                        if(response.data.config && response.data.config.showNoty != false)
-                            noty({ text: response.data.message,type: 'success'});
-                    }
-                    else if(response.data.success == false){
-                        noty({ text: response.data.message,type: 'error'});
-                    }
-                }
-
-                // do something on success
-                $rootScope.$broadcast('ajax', false);
-                return response;
-            },
-            'responseError': function(rejection) {
-                //console.log("Notify ajax Erro");
-
-                noty({ text: "Vixeeee servidor nao respondeu como deveria... FDP!!!",type: 'error'});
-
-                // do something on error
-                $rootScope.$broadcast('ajax', false);
-
-                return $q.reject(rejection);
-            }
-        };
-    });
-
-    angularApp.config(function ($httpProvider) {
+    //configurando interceptor de requisicoes ajax na aplicacao Admin
+    angularAppAdmin.config(function ($httpProvider) {
         $httpProvider.interceptors.push('ajaxInterceptor');
     });
 
-    angularApp.directive('showTab', function () {
+    angular.module('myAppCommon.Directives').directive('showTab', function () {
         return {
             link: function (scope, element, attrs) {
                 element.click(function(e) {
@@ -72,7 +44,7 @@
         };
     });
 
-    angularApp.directive('appFilereader', function($q) {
+    angular.module('myAppCommon.Directives').directive('appFilereader', function($q) {
         var slice = Array.prototype.slice;
 
         return {
@@ -113,7 +85,40 @@
         }; //return
     });
 
-	angularApp.factory('postAjaxServices', function ($http) {
+    angular.module('myAppCommon.Factories').factory('ajaxInterceptor', function($q, $rootScope) {
+        return {
+            'response': function(response) {
+                //console.log("Notify ajax Sucesso");
+                //console.log(response);
+
+                if(response.data.success !== null || response.data.success !== undefined){
+                    if(response.data.success == true){
+                        if(response.data.config && response.data.config.showNoty != false)
+                            noty({ text: response.data.message,type: 'success'});
+                    }
+                    else if(response.data.success == false){
+                        noty({ text: response.data.message,type: 'error'});
+                    }
+                }
+
+                // do something on success
+                $rootScope.$broadcast('ajax', false);
+                return response;
+            },
+            'responseError': function(rejection) {
+                //console.log("Notify ajax Erro");
+
+                noty({ text: "Vixeeee servidor nao respondeu como deveria... FDP!!!",type: 'error'});
+
+                // do something on error
+                $rootScope.$broadcast('ajax', false);
+
+                return $q.reject(rejection);
+            }
+        };
+    });
+
+	angular.module('myAppCommon.Factories').factory('postAjaxServices', function ($http) {
 	    return {
 			getPosts : function () {
 				return $http.post('/post/getPosts');
@@ -133,7 +138,7 @@
     	}
 	});
 
-    angularApp.factory('userAjaxServices', function ($http) {
+    angular.module('myAppCommon.Factories').factory('userAjaxServices', function ($http) {
         return {
             login : function (user) {
                 return $http.post('/user/Login', {user:user});
@@ -156,7 +161,7 @@
         }
     });
 
-    angularApp.factory('categoryAjaxServices', function ($http) {
+    angular.module('myAppCommon.Factories').factory('categoryAjaxServices', function ($http) {
         return {
             getCategories : function () {
                 return $http.post('/category/getCategories');
@@ -176,34 +181,15 @@
         }
     });
 
-    angularApp.controller("MenuController", function($scope){
+    angular.module('myAppCommon.Controllers').controller("MenuController", function($scope){
         $scope.jpm = {};
         // Fast Click for Mobile - removes 300ms delay - https://github.com/ftlabs/fastclick
         FastClick.attach(document.body);
 
-        // Add Bg colour from JS so jPanel has time to initalize
-        $('body').css({"background-color":"#333337"});
-
-        $scope.jpm = $.jPanelMenu({
-                menu : '#menu-target',
-                trigger: '.menu-trigger',
-                animated: false,
-                keyboardShortcuts: false,
-                beforeOpen : ( function() {
-                    if (matchMedia('only screen and (min-width: 992px)').matches) {
-                        $('.sidebar').css("left", "250px");
-                    }
-                }),
-                beforeClose : ( function() {
-                    $('.sidebar').css("left", "0");
-                    $('.writer-icon, .side-writer-icon').removeClass("fadeOutUp");
-                })
-            });
-
-        $scope.jpm.on();
+        $('.menu-trigger').bigSlide();
     });
 
-    angularApp.controller("AdminPostController", function($scope, $filter, postAjaxServices, categoryAjaxServices){
+    angularAppAdmin.controller("AdminPostController", function($scope, $filter, postAjaxServices, categoryAjaxServices){
         $scope.post = {};
         $scope.posts = [];
         $scope.categories = [];
@@ -272,7 +258,7 @@
         }
     });
 
-    angularApp.controller("AdminUserController", function($scope, $filter, userAjaxServices){
+    angularAppAdmin.controller("AdminUserController", function($scope, $filter, userAjaxServices){
         $scope.user = {};
         $scope.users = [];
         $scope.modalTitle = "";
@@ -317,7 +303,7 @@
         }
     });
 
-    angularApp.controller("AdminCategoryController", function($scope, $filter, categoryAjaxServices){
+    angularAppAdmin.controller("AdminCategoryController", function($scope, $filter, categoryAjaxServices){
         $scope.category = {};
         $scope.categories = [];
         $scope.modalTitle = "";
@@ -362,7 +348,25 @@
         }
     });
 
-    angularApp.controller("HomeController", function($scope,$sce, postAjaxServices, categoryAjaxServices){
+    angularAppAdmin.controller("LoginController", function($scope, userAjaxServices){
+        $scope.user = {};
+
+        $scope.login = function(user){
+            userAjaxServices.login(user)
+                .success(function(data, status, headers, config) {
+                    console.log("login Request feita:");
+                    console.log(data);
+                    if(data.success)
+                        window.location = '/admin/portal';
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("login Request deu zica!:");
+                    console.log(data);
+                });
+        }
+    });
+
+    angularAppBlog.controller("HomeController", function($scope,$sce, postAjaxServices, categoryAjaxServices){
         $scope.posts = [];
         $scope.categories = [];
 
@@ -371,12 +375,12 @@
         };
 
         $scope.getPosts = function(){
-        	postAjaxServices.getPosts()
-        		.success(function(data, status, headers, config) {
+            postAjaxServices.getPosts()
+                .success(function(data, status, headers, config) {
                     console.log("getPosts Request feita:");
                     console.log(data);
                     if(data.success)
-                    	$scope.posts = data.data;
+                        $scope.posts = data.data;
                 })
                 .error(function(data, status, headers, config) {
                     console.log("getPosts Request deu zica!:");
@@ -393,24 +397,6 @@
                 })
                 .error(function(data, status, headers, config) {
                     console.log("getCategories Request deu zica!:");
-                });
-        }
-    });
-
-    angularApp.controller("LoginController", function($scope, userAjaxServices){
-        $scope.user = {};
-
-        $scope.login = function(user){
-            userAjaxServices.login(user)
-                .success(function(data, status, headers, config) {
-                    console.log("login Request feita:");
-                    console.log(data);
-                    if(data.success)
-                        window.location = '/admin/portal';
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("login Request deu zica!:");
-                    console.log(data);
                 });
         }
     });
