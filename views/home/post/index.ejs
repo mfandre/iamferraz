@@ -1,4 +1,4 @@
-<div class="col-md-10 col-sm-12 col-md-offset-5 main-content" ng-controller="PostController as postCtrl">   
+<div class="col-md-7 col-sm-12 col-md-offset-5 main-content animated fadeIn " ng-controller="PostController as postCtrl">   
 
     <h1>{{post.title}}</h1>
 
@@ -10,23 +10,6 @@
         <img ng-src="{{post.author.avatar}}" class="user-icon" alt="user-image">By <a class="" href="category.html">{{post.author.name}}</a> in <span ng-repeat="category in post.category"><a href="#{{category._id}}">{{category.name}}</a> <i class="link-spacer"></i></span> <i class="fa fa-bookmark"></i> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}
     </p>
 
+    <a href="" ng-click="goBack()" class="cd-botttomRight"><i class="fa fa-chevron-left fa-2"></i></a>
+
 </div><!-- main-content/col -->
-
-<footer class="single col-md-10 col-sm-12 col-md-offset-5 ">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-4">
-                <div class="social">
-                    <p>Share this article</a>
-                    <div class="social-links">
-                        <a class="social-icon" href="#" data-platform="twitter" data-message="Message about this post" data-url="http://writertheme.com/post"><i class="fa fa-twitter"></i></a>
-
-                        <a class="social-icon" href="#" data-platform="facebook" data-message="Message about this post" data-url="http://writertheme.com/post"><i class="fa fa-facebook-official"></i></a>
-
-                        <a class="social-icon" data-platform="mail"  href="mailto:support@writertheme.com"><i class="fa fa-envelope"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div><!-- end row -->
-    </div>
-</footer>
