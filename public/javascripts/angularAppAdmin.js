@@ -3,9 +3,9 @@
     angular.module('myAppCommon.Factories', []);
     angular.module('myAppCommon.Controllers', []);
 
-    var angularAppAdmin = angular.module('myAppAdmin', ['ui.router','ngResource','colorpicker.module','wysiwyg.module','ngTagsInput','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
+    var angularAppAdmin = angular.module('myAppAdmin', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate', 'colorpicker.module','wysiwyg.module','ngTagsInput','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
 
-    var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
+    var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
 
     //configurando rotas do Admin
     angularAppAdmin.config(function ($stateProvider, $urlRouterProvider) {
