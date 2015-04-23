@@ -50,18 +50,7 @@
 
                     <div class="form-group">
                         <label for="text">Texto</label>
-                         <wysiwyg textarea-id="postText" 
-                          textarea-class="form-control"  
-                          textarea-height="180px" 
-                          textarea-name="Text" 
-                          textarea-required 
-                          ng-model="post.text" 
-                          enable-bootstrap-title="true"
-                          textarea-menu="menu"
-                          textarea-custom-menu="custom"
-                          fn="talk()"
-                          disabled="disabled">
-                        </wysiwyg>
+                        <textarea name="text" ckeditor ng-model="post.text"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

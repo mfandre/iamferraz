@@ -36,7 +36,7 @@ module.exports = function(app) {
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
-			}).populate('author').populate('category').exec();
+			}).sort({created_date: -1}).populate('author').populate('category').exec();
 		},
 		deletePost: function(req, res){
 			var id = req.body.id;
