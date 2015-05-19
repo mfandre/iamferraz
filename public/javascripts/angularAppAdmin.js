@@ -155,6 +155,9 @@
             },
             getPost : function (id) {
                 return $http.post('/post/getPost', {id:id});
+            },
+            sendCommentToPost : function (comment, postId) {
+                return $http.post('/post/sendCommentToPost', {comment: comment, postId:postId});
             }
     	}
 	});
@@ -426,8 +429,9 @@
         };
     });
 
-    angularAppBlog.controller("PostController", function($scope,$sce, $window){
+    angularAppBlog.controller("PostController", function($scope,$sce, $window,postAjaxServices){
         $scope.post = angularAppBlog.selectedPost;
+        $scope.comment = {name:"", email:"", comment:""};
 
         $scope.convertHtml = function(text) {
             return $sce.trustAsHtml(text);
@@ -435,6 +439,12 @@
 
         $scope.goBack = function(){
             $window.history.back();
+        };
+
+        $scope.sendComment = function(comment){
+            $scope.post.comments.push(comment);
+            postAjaxServices.sendCommentToPost(comment, $scope.post._id);
+            $scope.comment = {};
         };
         
     });
