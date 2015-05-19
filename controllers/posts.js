@@ -36,11 +36,11 @@ module.exports = function(app) {
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
-			}).sort({created_date: -1}).populate('author').populate('category').exec();
+			}).sort({created_date: -1}).populate('author').populate('category').populate('comments').exec();//.populate({path:'comments',select:'name comment -email'})
 		},
 		deletePost: function(req, res){
 			var id = req.body.id;
-			console.log(JSON.stringify(id));
+			//console.log(JSON.stringify(id));
 
 			Post.remove({ _id: id }, function(erro) {
 				if (!erro) {
@@ -65,7 +65,7 @@ module.exports = function(app) {
 		},
 		getPost: function(req, res){
 			var id = req.body.id;
-			console.log(JSON.stringify(id));
+			//console.log(JSON.stringify(id));
 			Post.findById(id, function (erro, post) {
 				if (!erro) {
 					app.sendResponse(res, true, "Post encontrado!", post);
@@ -73,7 +73,21 @@ module.exports = function(app) {
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do post." + erro, post);
 				}
-			}).populate('author').exec();
+			}).populate('author').populate('category').populate('comments', '-email').exec();
+		},
+		sendCommentToPost: function(req, res){
+			var id = req.body.postId;
+			var comment = req.body.comment;
+
+			Post.findByIdAndUpdate(id, {$push: {"comments": comment}},{safe: true, upsert: true},function(erro, model) {
+					if (!erro) {
+						app.sendResponse(res, true, "Comentário enviado!", model);
+					}
+					else {
+						app.sendResponse(res, false, "Xiiiii deu zica! No envio do comentário." + erro, model);
+					}
+				}
+			);
 		}
 	};
 	return PostController;
