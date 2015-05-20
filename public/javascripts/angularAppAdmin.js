@@ -106,6 +106,18 @@
         }; //return
     });
 
+    angular.module('myAppCommon.Directives').directive('afterRender', ['$timeout', function ($timeout) {
+        var def = {
+            restrict: 'A',
+            terminal: true,
+            transclude: false,
+            link: function (scope, element, attrs) {
+                $timeout(scope.$eval(attrs.afterRender), 0);  //Calling a scoped method
+            }
+        };
+        return def;
+    }]);
+
     angular.module('myAppCommon.Factories').factory('ajaxInterceptor', function($q, $rootScope) {
         return {
             'response': function(response) {
@@ -129,7 +141,7 @@
             'responseError': function(rejection) {
                 //console.log("Notify ajax Erro");
 
-                noty({ text: "Vixeeee servidor nao respondeu como deveria... FDP!!!",type: 'error'});
+                noty({ text: "Vixeeee servidor não respondeu como deveria... FDP!!!",type: 'error'});
 
                 // do something on error
                 $rootScope.$broadcast('ajax', false);
@@ -218,18 +230,11 @@
         $scope.posts = [];
         $scope.categories = [];
         $scope.modalTitle = "";
-        $scope.wysiwygMenu = [
-            ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript'],
-            ['format-block'],
-            ['font'],
-            ['font-size'],
-            ['font-color', 'hilite-color'],
-            ['remove-format'],
-            ['ordered-list', 'unordered-list', 'outdent', 'indent'],
-            ['left-justify', 'center-justify', 'right-justify'],
-            ['code', 'quote', 'paragraph'],
-            ['link', 'image']
-        ];
+        $scope.editorOptions = {
+            //customConfig: 'public/javascripts/vendor/ckeditor/config.js'
+            extraPlugins: 'codesnippet',
+            codeSnippet_theme: 'monokai_sublime'
+        };
 
         $scope.openCreateEditPostModal = function(title, post){
             $scope.modalTitle = title;
@@ -433,6 +438,12 @@
         $scope.post = angularAppBlog.selectedPost;
         $scope.comment = {name:"", email:"", comment:""};
 
+        $scope.highlightBlocks = function () {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        };
+
         $scope.convertHtml = function(text) {
             return $sce.trustAsHtml(text);
         };
@@ -446,7 +457,6 @@
             postAjaxServices.sendCommentToPost(comment, $scope.post._id);
             $scope.comment = {};
         };
-        
     });
 
 })();

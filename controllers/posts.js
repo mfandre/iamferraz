@@ -1,5 +1,6 @@
 module.exports = function(app) {
 	var Post = app.models.post;
+	var Comment = app.models.comment;
 
 	var PostController = {
 		createSavePost: function(req, res){
@@ -36,7 +37,7 @@ module.exports = function(app) {
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
-			}).sort({created_date: -1}).populate('author').populate('category').populate('comments').exec();//.populate({path:'comments',select:'name comment -email'})
+			}).sort({created_date: -1}).populate('author').populate('category').exec();//.populate({path:'comments',select:'name comment -email'})
 		},
 		deletePost: function(req, res){
 			var id = req.body.id;
@@ -73,7 +74,7 @@ module.exports = function(app) {
 				else {
 					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do post." + erro, post);
 				}
-			}).populate('author').populate('category').populate('comments', '-email').exec();
+			}).populate('author').populate('category').exec();
 		},
 		sendCommentToPost: function(req, res){
 			var id = req.body.postId;

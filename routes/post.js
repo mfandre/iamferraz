@@ -5,4 +5,5 @@ module.exports = function(app) {
 	app.post('/post/deletePost',app.isAuthenticated, post.deletePost);
 	app.post('/post/editPost', app.isAuthenticated, post.editPost);
 	app.post('/post/getPost', app.isAuthenticated, post.getPost);
+	app.post('/post/sendCommentToPost',post.sendCommentToPost);
 };

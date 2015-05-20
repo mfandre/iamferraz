@@ -4,7 +4,7 @@
 
 	<p class="subtitle">{{post.subtitle}}</p>
 
-	<div ng-bind-html="convertHtml(post.text)"></div>
+	<div ng-bind-html="convertHtml(post.text)" after-render="highlightBlocks"></div>
 
 	<p class="meta">
 		<img ng-src="{{post.author.avatar}}" class="user-icon" alt="user-image">By <a class="" href="category.html">{{post.author.name}}</a> in <span ng-repeat="category in post.category"><a href="#{{category._id}}">{{category.name}}</a> <i class="link-spacer"></i></span> <i class="fa fa-bookmark"></i> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}
@@ -13,34 +13,37 @@
 	<a href="" ng-click="goBack()" class="cd-botttomRight"><i class="fa fa-chevron-left fa-2"></i></a>
 
 	<div>
-		<div>
-			<div ng-repeat="cmmt in post.comments">
-				<pre>
-					{{cmmt.name}}
-					{{cmmt.email}}
+		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#comments">Show Comments</button>
+		<hr></hr>
+		<div id='comments' class="collapse">
+			<div class="media well" ng-repeat="cmmt in post.comments">
+				<div class="media-body">
+					<h4 class="media-heading">{{cmmt.name}}
+						<small class='pull-right'>{{cmmt.created_date | date:'dd-MM-yyyy HH:mm:ss'}}</small>
+					</h4>
 					{{cmmt.comment}}
-				</pre>
+				</div>
 			</div>
 		</div>
 
-		<form>
-			<div class="form-group">
-				<label for="name">Nome</label>
-				<input ng-model="comment.name" type="text" placeholder="Nome" class="form-control" name="name">
+		<form name="commentForm" ng-submit="sendComment(comment)" novalidate>
+			<div class="form-group" ng-class="{ 'has-error' : commentForm.name.$invalid && !commentForm.name.$pristine }">
+				<label for="name">Name</label>
+				<input ng-model="comment.name" type="text" placeholder="Name" class="form-control" name="name" ng-minlength=3  required>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group" ng-class="{ 'has-error' : commentForm.email.$invalid && !commentForm.email.$pristine }">
 				<label for="name">Email</label>
-				<input ng-model="comment.email" type="text" placeholder="Email" class="form-control" name="email">
+				<input ng-model="comment.email" type="email" placeholder="Email" class="form-control" name="email" required>
+			</div>
+
+			<div class="form-group" ng-class="{ 'has-error' : commentForm.comment.$invalid && !commentForm.comment.$pristine }">
+				<label for="comment">Comment</label>
+				<textarea ng-model="comment.comment" placeholder="Comment" class="form-control" name="comment" required></textarea>
 			</div>
 
 			<div class="form-group">
-				<label for="comment">Comentário</label>
-				<input ng-model="comment.comment" type="text" placeholder="Comentário" class="form-control" name="comment">
-			</div>
-
-			<div class="form-group">
-				<button ng-click="sendComment(comment)" type="button" class="btn btn-default" value="Send">Enviar</button>
+				<button type="submit" ng-disabled="commentForm.$invalid" class="btn btn-primary">Enviar</button>
 			</div>
 		</form>
 	</div>

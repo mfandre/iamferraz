@@ -12,7 +12,7 @@
                 <div class="post-preview col-xs-10  no-gutter">
                     <h2><a ng-click="openPost(post)" ui-sref="post">{{post.title}}</a></h2>
 
-                    <div ng-bind-html="convertHtml(post.text)"></div>
+                    <div>{{post.summary}}</div>
 
                     <p class="meta">
                         <a href="">{{post.author.name}}</a> in <span ng-repeat="category in post.category"><a href="#{{category._id}}">{{category.name}}</a> <i class="link-spacer"></i></span> <i class="fa fa-bookmark"></i> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}

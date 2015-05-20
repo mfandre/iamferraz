@@ -11,6 +11,7 @@ module.exports = function(app) {
 	var post = Schema({
 		title			: {type: String, required: true},
 		text			: {type: String, required: true},
+		summary			: {type: String, required: true},
 		created_date	: {type: Date, default: Date.now },
 		author			: {type: Schema.Types.ObjectId, ref: 'user'}, //{type: String, required: true},
 		comments		: [comment],
