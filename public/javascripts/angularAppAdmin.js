@@ -398,6 +398,7 @@
     angularAppBlog.controller("HomeController", function($scope,$sce,$filter, postAjaxServices, categoryAjaxServices){
         $scope.posts = [];
         $scope.categories = [];
+        $scope.filteredPostsByCategory = [];
 
         $scope.openPost = function(post){
             angularAppBlog.selectedPost = post;
@@ -410,27 +411,32 @@
         $scope.getPosts = function(){
             postAjaxServices.getPosts()
                 .success(function(data, status, headers, config) {
-                    console.log("getPosts Request feita:");
-                    console.log(data);
+                    //console.log("getPosts Request feita:");
+                    //console.log(data);
                     if(data.success)
                         $scope.posts = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getPosts Request deu zica!:");
                 });
+                //.error(function(data, status, headers, config) {
+                //    console.log("getPosts Request deu zica!:");
+                //});
         };
 
         $scope.getCategories = function(){
             categoryAjaxServices.getCategories()
                 .success(function(data, status, headers, config) {
-                    console.log("getCategories Request feita:");
-                    console.log(data);
+                    //console.log("getCategories Request feita:");
+                    //console.log(data);
                     if(data.success)
                         $scope.categories = data.data;
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("getCategories Request deu zica!:");
                 });
+                //.error(function(data, status, headers, config) {
+                //    console.log("getCategories Request deu zica!:");
+                //});
+        };
+
+        $scope.filterPostsByCategory = function(id){
+            $scope.filteredPostsByCategory = $filter('filter')($scope.posts, {category: {_id:id}});
+            //console.log($scope.filteredPostsByCategory);
         };
     });
 

@@ -28,9 +28,20 @@
             <div class="category row">
                 <section>
                     <div ng-repeat="category in categories" class="category-preview col-xs-6 col-sm-4 ">
-                        <h2>{{category.name}}</h2>
-                        <a href="#{{category._id}}"><img ng-src="{{category.image}}" alt="category-image"></a>
+                        <a href="#{{category._id}}" ng-click="filterPostsByCategory(category._id)">
+                            <h2>{{category.name}}</h2>
+                            <img ng-src="{{category.image}}" alt="category-image">
+                        </a>
                     </div>
+                </section>
+            </div>
+            <div class="category row">
+                <section>
+                    <ul class="list-group">
+                        <li ng-repeat="post in filteredPostsByCategory" class="list-group-item">
+                            <a ng-click="openPost(post)" ui-sref="post">{{post.title}}</a> <i class="link-spacer"></i>{{post.author.name}} <i class="link-spacer"></i></span> {{post.created_date | date:'dd-MM-yyyy HH:mm:ss'}}
+                        </li>
+                    </ul>
                 </section>
             </div>
         </div>
