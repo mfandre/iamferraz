@@ -448,6 +448,18 @@
             $('pre code').each(function(i, block) {
                 hljs.highlightBlock(block);
             });
+
+
+            //gamps para abrir as imagens em um modal
+            $('.postContent img').wrap(function() {
+                return "<a class='imageLightbox' href='"+this.src+"' data-toggle='lightbox'>";
+            });
+
+
+            $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            }); 
         };
 
         $scope.convertHtml = function(text) {
