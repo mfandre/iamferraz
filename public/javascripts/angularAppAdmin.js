@@ -474,6 +474,12 @@
             postAjaxServices.sendCommentToPost(comment, $scope.post._id);
             $scope.comment = {};
         };
+
+        $scope.setResponse = function (response) {
+            // send the `response` to your server for verification.
+            console.log(response);
+            $scope.comment['g-recaptcha-response'] = response; 
+        };
     });
 
 })();

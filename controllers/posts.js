@@ -2,6 +2,27 @@ module.exports = function(app) {
 	var Post = app.models.post;
 	var Comment = app.models.comment;
 
+	var checkCaptcha = function(captchaResponse, callback){
+		var https = require('https');
+		https.get("https://www.google.com/recaptcha/api/siteverify?secret=6LeGNQcTAAAAAIwc9Fch23eGYd9hi6TuEEsV6C5N&response=" + captchaResponse, function(resp){
+			var data = "";
+			resp.on('data', function(chunk){
+				data += chunk.toString();
+				console.log(chunk);
+			});
+			resp.on('end', function() {
+				try {
+					var parsedData = JSON.parse(data);
+					callback(parsedData.success);
+				} catch (e) {
+					callback(false);
+				}
+			});
+		}).on("error", function(e){
+			console.log("Got error: " + e.message);
+		});
+	};
+
 	var PostController = {
 		createSavePost: function(req, res){
 			var post = req.body.post;
@@ -80,15 +101,25 @@ module.exports = function(app) {
 			var id = req.body.postId;
 			var comment = req.body.comment;
 
-			Post.findByIdAndUpdate(id, {$push: {"comments": comment}},{safe: true, upsert: true},function(erro, model) {
-					if (!erro) {
-						app.sendResponse(res, true, "Comentário enviado!", model);
-					}
-					else {
-						app.sendResponse(res, false, "Xiiiii deu zica! No envio do comentário." + erro, model);
-					}
+			console.log(req.body);
+			console.log(req.body.comment['g-recaptcha-response']);
+			var responseCaptcha = req.body.comment['g-recaptcha-response'];
+
+			checkCaptcha(responseCaptcha,function(success) {
+				if (success) {
+					Post.findByIdAndUpdate(id, {$push: {"comments": comment}},{safe: true, upsert: true},function(erro, model) {
+							if (!erro) {
+								app.sendResponse(res, true, "Comentário enviado!", model);
+							}
+							else {
+								app.sendResponse(res, false, "Xiiiii deu zica! No envio do comentário." + erro, model);
+							}
+						}
+					);
+				} else {
+					app.sendResponse(res, false, "Captcha incorreto!");
 				}
-			);
+			});
 		}
 	};
 	return PostController;
