@@ -6,7 +6,13 @@ module.exports = function(app) {
 		partials: function(req, res) {
 			var name = req.params.name;
 			console.log("blog chamou partials! "+ name);
-			res.render('home/' + name + '/index');
+			res.render('home/' + name + '/index',{},function(err, html) {
+				if(err) {
+					res.render('error'); // File doesn't exist
+				} else {
+					res.end(html);
+				}
+			});
 		}
 	};
 	return HomeController;
