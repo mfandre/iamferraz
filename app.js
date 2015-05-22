@@ -3,6 +3,7 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , cookieParser = require('cookie-parser')
   , expressSession = require('express-session')
+  , compression = require('compression')
   , app = express()
   , mongoose = require('mongoose')
 ;
@@ -16,6 +17,7 @@ db.once('open', function (callback) {
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.use(compression());
 
 app.use(cookieParser('iamferraz_blog'));
 app.use(expressSession({
@@ -26,7 +28,11 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
-app.use('/public', express.static(__dirname + '/public'));
+
+app.use('/public', express.static(__dirname + '/public',{
+  maxAge: 3600000 // milissegundos
+}));
+
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
 
