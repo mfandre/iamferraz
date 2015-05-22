@@ -8,7 +8,7 @@ module.exports = function(app) {
 			var data = "";
 			resp.on('data', function(chunk){
 				data += chunk.toString();
-				console.log(chunk);
+				//console.log(chunk);
 			});
 			resp.on('end', function() {
 				try {
@@ -19,7 +19,7 @@ module.exports = function(app) {
 				}
 			});
 		}).on("error", function(e){
-			console.log("Got error: " + e.message);
+			app.sendResponse(res, false, "Xiiiii deu zica! Envio do comentário.", {showNoty: false});
 		});
 	};
 
@@ -101,8 +101,6 @@ module.exports = function(app) {
 			var id = req.body.postId;
 			var comment = req.body.comment;
 
-			console.log(req.body);
-			console.log(req.body.comment['g-recaptcha-response']);
 			var responseCaptcha = req.body.comment['g-recaptcha-response'];
 
 			checkCaptcha(responseCaptcha,function(success) {
@@ -117,7 +115,7 @@ module.exports = function(app) {
 						}
 					);
 				} else {
-					app.sendResponse(res, false, "Captcha incorreto!");
+					app.sendResponse(res, false, "Captcha incorreto!", {});
 				}
 			});
 		}
