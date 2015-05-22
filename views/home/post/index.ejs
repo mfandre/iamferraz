@@ -27,7 +27,7 @@
 			</div>
 		</div>
 
-		<form name="commentForm" ng-submit="sendComment(comment)" novalidate>
+		<form name="commentForm" ng-submit="commentForm.$valid && sendComment(comment)" novalidate>
 			<div class="form-group" ng-class="{ 'has-error' : commentForm.name.$invalid && !commentForm.name.$pristine }">
 				<label for="name">Name</label>
 				<input ng-model="comment.name" type="text" placeholder="Name" class="form-control" name="name" ng-minlength=3  required>
@@ -42,6 +42,13 @@
 				<label for="comment">Comment</label>
 				<textarea ng-model="comment.comment" placeholder="Comment" class="form-control" name="comment" required></textarea>
 			</div>
+
+			<div class="form-group">
+				<div vc-recaptcha 
+					key="'6LeGNQcTAAAAAOh63N_Q8rMmCi4T-OL3aXCsW_0z'" 
+					theme="light">
+				</div>
+			</div>	
 
 			<div class="form-group">
 				<button type="submit" ng-disabled="commentForm.$invalid" class="btn btn-primary">Enviar</button>

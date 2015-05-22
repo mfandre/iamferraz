@@ -5,7 +5,7 @@
 
     var angularAppAdmin = angular.module('myAppAdmin', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate', 'colorpicker.module','ngCkeditor','ngTagsInput','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
 
-    var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate','ngSanitize','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
+    var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate','ngSanitize','vcRecaptcha','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
 
     //configurando rotas do Admin
     angularAppAdmin.config(function ($stateProvider, $urlRouterProvider) {
@@ -440,7 +440,7 @@
         };
     });
 
-    angularAppBlog.controller("PostController", function($scope,$sce, $window,postAjaxServices){
+    angularAppBlog.controller("PostController", function($scope,$sce, $window,postAjaxServices, vcRecaptchaService){
         $scope.post = angularAppBlog.selectedPost;
         $scope.comment = {name:"", email:"", comment:""};
 
