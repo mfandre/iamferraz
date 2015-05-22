@@ -37,7 +37,7 @@ module.exports = function(app) {
 				}else{
 					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os posts." + erro, posts);
 				}
-			}).sort({created_date: -1}).populate('author').populate('category').exec();//.populate({path:'comments',select:'name comment -email'})
+			}).select('-comments.email').sort({created_date: -1}).populate('author', '-password -email').populate('category').exec();//.populate({path:'comments',select:'name comment -email'})
 		},
 		deletePost: function(req, res){
 			var id = req.body.id;

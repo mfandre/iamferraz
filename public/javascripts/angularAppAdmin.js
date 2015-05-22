@@ -449,13 +449,12 @@
                 hljs.highlightBlock(block);
             });
 
-
-            //gamps para abrir as imagens em um modal
+            //gambs para abrir as imagens em um modal
             $('.postContent img').wrap(function() {
                 return "<a class='imageLightbox' href='"+this.src+"' data-toggle='lightbox'>";
             });
 
-
+            $(document).undelegate('*[data-toggle="lightbox"]', 'click');
             $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
                 event.preventDefault();
                 $(this).ekkoLightbox();
