@@ -477,7 +477,7 @@
 
         $scope.setResponse = function (response) {
             // send the `response` to your server for verification.
-            console.log(response);
+            //console.log(response);
             $scope.comment['g-recaptcha-response'] = response; 
         };
     });
