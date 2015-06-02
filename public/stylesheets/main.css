@@ -70,9 +70,9 @@
 }
 
 .panel {
-    position: fixed;
+    /*position: fixed;
     left: -15.625em; /*or width of your navigation panel*/
-    width: 15.625em; /*should match the above value*/
+    /*width: 15.625em; /*should match the above value*/
     background-color: #333337;
 }
 

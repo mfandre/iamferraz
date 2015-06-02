@@ -4,8 +4,6 @@ var express = require('express')
   , cookieParser = require('cookie-parser')
   , expressSession = require('express-session')
   , compression = require('compression')
-  , freediskspace = require('freediskspace')
-  , os = require('os')
   , app = express()
   , mongoose = require('mongoose')
 ;
@@ -60,31 +58,9 @@ app.sendResponse = function(res, success, message, data, config){
 load('models')
   .then('controllers')
   .then('routes')
+  .then('schedule')
   .into(app);
 
 app.listen(3000, function(){
   console.log("iamferraz is running bicht!!!");
 });
-
-
-
-/*
-
-freediskspace.driveList(function(error, drives){
-    console.log(drives);
-    // ['/', '/tmp', '/home']
-    // or
-    // ['C:', 'D:', 'Z:']
-});
-
-freediskspace.detail('c:', function(error, details){
-    console.log(details);
-    // { drive: '/',
-    //   total: 2199023255552,
-    //   used: 2199023255552,
-    //   free: 155692564480 }
-});
-
-console.log(os.totalmem());
-console.log(os.freemem());
-*/

@@ -23,6 +23,10 @@
             .state('categories', {
                 url: "admin/portal/categories",
                 templateUrl: "admin/portal/categories"
+            })
+            .state('serverStatus', {
+                url: "admin/portal/serverStatus",
+                templateUrl: "admin/portal/serverStatus"
             });
     });
 
