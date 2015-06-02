@@ -2,16 +2,14 @@ module.exports = function(app) {
 	var ServerStatus = app.models.serverStatus;
 
 	var ServerStatusController = {
-		diskSpaceStatus: function(req, res) {
+		getStatus: function(req, res) {
 			ServerStatus.findOne({}, {}, { sort: { 'created_date' : -1 } }, function(err, status) {
-				console.log( status );
+				if(!err)
+					app.sendResponse(res, true, "serverStatus", status,{showNoty: false});
+				else
+					app.sendResponse(res, false, "Xiiiii deu zica!", null);
 			});
-
-			app.sendResponse(res, true, "DiskSpace", {});
 		},
-		memoryStatus: function(req, res){
-			app.sendResponse(res, true, "Memory", {});
-		}
 	};
 	return ServerStatusController;
 };

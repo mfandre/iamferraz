@@ -6,7 +6,15 @@ module.exports = function(app) {
 	var ServerStatus = app.models.serverStatus;
 
 	try {
+
 		new CronJob('1 * * * * *', function() {
+			var path = '';
+
+			if(os.platform().indexOf('win') > 0)
+				path = 'c:';
+			else
+				path = '/dev/vda1';
+
 			//console.log('You will see this message every minute');
 			freediskspace.detail('c:', function(error, details){
 				//console.log(details);
@@ -14,6 +22,11 @@ module.exports = function(app) {
 				//   total: 2199023255552,
 				//   used: 2199023255552,
 				//   free: 155692564480 }
+
+				if(error){
+					console.log(JSON.stringify(error));
+					return;
+				}
 
 				var status = {
 					diskFree		: details.free,

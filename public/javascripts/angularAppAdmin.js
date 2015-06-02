@@ -221,6 +221,14 @@
         }
     });
 
+    angular.module('myAppCommon.Factories').factory('serverStatusAjaxServices', function ($http) {
+        return {
+            getStatus : function () {
+                return $http.post('/serverStatus/getStatus');
+            }
+        }
+    });
+
     angular.module('myAppCommon.Controllers').controller("MenuController", function($scope){
         $scope.jpm = {};
         // Fast Click for Mobile - removes 300ms delay - https://github.com/ftlabs/fastclick
@@ -379,6 +387,129 @@
         $scope.getCategory = function(id){
             categoryAjaxServices.getCategory(id);
         }
+    });
+
+    angularAppAdmin.controller("ServerStatusController", function($scope, $filter, serverStatusAjaxServices){
+        $scope.serverStatusObj = {};
+        
+        $scope.initializeDiskChart = function(){
+            $scope.getStatus();
+        }
+
+        $scope.getStatus = function(){
+            serverStatusAjaxServices.getStatus()
+                .success(function(data, status, headers, config) {
+                    if(data.success){
+                        $scope.serverStatusObj = data.data;
+                        $scope.printDiskChart();
+                        $scope.printMemmoryChart();
+                        console.log(data);
+                    }
+                });
+        }
+
+        $scope.printDiskChart = function(){
+            var options = {
+                //Boolean - Whether we should show a stroke on each segment
+                segmentShowStroke : true,
+
+                //String - The colour of each segment stroke
+                segmentStrokeColor : "#fff",
+
+                //Number - The width of each segment stroke
+                segmentStrokeWidth : 2,
+
+                //Number - The percentage of the chart that we cut out of the middle
+                percentageInnerCutout : 50, // This is 0 for Pie charts
+
+                //Number - Amount of animation steps
+                animationSteps : 100,
+
+                //String - Animation easing effect
+                animationEasing : "easeOutBounce",
+
+                //Boolean - Whether we animate the rotation of the Doughnut
+                animateRotate : true,
+
+                //Boolean - Whether we animate scaling the Doughnut from the centre
+                animateScale : false,
+
+            };
+
+            var data = [
+                {
+                    value: $scope.serverStatusObj.diskFree*(1*1e-9),
+                    color:"#F7464A",
+                    highlight: "#FF5A5E",
+                    label: "Free"
+                },
+                {
+                    value: $scope.serverStatusObj.diskUsed*(1*1e-9),
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
+                    label: "Used"
+                },
+            ];
+
+            
+
+            // Get context with jQuery - using jQuery's .get() method.
+            var ctx = $("#diskSpaceChart").get(0).getContext("2d");
+            // This will get the first returned node in the jQuery collection.
+            var myPieChart = new Chart(ctx).Pie(data,options);
+        }
+
+        $scope.printMemmoryChart = function(){
+            var options = {
+                //Boolean - Whether we should show a stroke on each segment
+                segmentShowStroke : true,
+
+                //String - The colour of each segment stroke
+                segmentStrokeColor : "#fff",
+
+                //Number - The width of each segment stroke
+                segmentStrokeWidth : 2,
+
+                //Number - The percentage of the chart that we cut out of the middle
+                percentageInnerCutout : 50, // This is 0 for Pie charts
+
+                //Number - Amount of animation steps
+                animationSteps : 100,
+
+                //String - Animation easing effect
+                animationEasing : "easeOutBounce",
+
+                //Boolean - Whether we animate the rotation of the Doughnut
+                animateRotate : true,
+
+                //Boolean - Whether we animate scaling the Doughnut from the centre
+                animateScale : false,
+
+            };
+
+            var data = [
+                {
+                    value: $scope.serverStatusObj.memoryFree*(1*1e-6),
+                    color:"#F7464A",
+                    highlight: "#FF5A5E",
+                    label: "Free"
+                },
+                {
+                    value: $scope.serverStatusObj.memoryTotal*(1*1e-6)-$scope.serverStatusObj.memoryFree*(1*1e-6),
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
+                    label: "Used"
+                },
+            ];
+
+            
+
+            // Get context with jQuery - using jQuery's .get() method.
+            var ctx = $("#memmoryChart").get(0).getContext("2d");
+            // This will get the first returned node in the jQuery collection.
+            var myPieChart = new Chart(ctx).Pie(data,options);
+        }
+
     });
 
     angularAppAdmin.controller("LoginController", function($scope, userAjaxServices){
