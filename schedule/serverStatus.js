@@ -8,12 +8,8 @@ module.exports = function(app) {
 	try {
 
 		new CronJob('1 * * * * *', function() {
-			var path = '';
-
-			if(os.platform().indexOf('win') > 0)
-				path = 'c:';
-			else
-				path = '/dev/vda1';
+			//path = 'c:';
+			//path = '/dev/vda1';
 
 			//console.log('You will see this message every minute');
 			freediskspace.detail('c:', function(error, details){
