@@ -439,14 +439,14 @@
             var data = [
                 {
                     value: $scope.serverStatusObj.diskFree*(1*1e-9),
-                    color:"#F7464A",
-                    highlight: "#FF5A5E",
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
                     label: "Free"
                 },
                 {
                     value: $scope.serverStatusObj.diskUsed*(1*1e-9),
-                    color: "#46BFBD",
-                    highlight: "#5AD3D1",
+                    color:"#F7464A",
+                    highlight: "#FF5A5E",
                     label: "Used"
                 },
             ];
@@ -490,14 +490,14 @@
             var data = [
                 {
                     value: $scope.serverStatusObj.memoryFree*(1*1e-6),
-                    color:"#F7464A",
-                    highlight: "#FF5A5E",
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
                     label: "Free"
                 },
                 {
                     value: $scope.serverStatusObj.memoryTotal*(1*1e-6)-$scope.serverStatusObj.memoryFree*(1*1e-6),
-                    color: "#46BFBD",
-                    highlight: "#5AD3D1",
+                    color:"#F7464A",
+                    highlight: "#FF5A5E",
                     label: "Used"
                 },
             ];
