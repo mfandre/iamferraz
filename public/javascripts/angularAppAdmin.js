@@ -229,6 +229,14 @@
         }
     });
 
+    angular.module('myAppCommon.Factories').factory('emailAjaxServices', function ($http) {
+        return {
+            sendEmail : function (email) {
+                return $http.post('/sendEmail' , {email : email});
+            }
+        }
+    });
+
     angular.module('myAppCommon.Controllers').controller("MenuController", function($scope){
         $scope.jpm = {};
         // Fast Click for Mobile - removes 300ms delay - https://github.com/ftlabs/fastclick
@@ -614,6 +622,21 @@
             // send the `response` to your server for verification.
             //console.log(response);
             $scope.comment['g-recaptcha-response'] = response; 
+        };
+    });
+
+    angularAppBlog.controller("EmailController", function($scope,$sce, $window,emailAjaxServices, vcRecaptchaService){
+        $scope.email = {name:"", email:"", msg:""};
+
+        $scope.sendEmail = function(){
+            emailAjaxServices.sendEmail($scope.email);
+            $scope.email = {name:"", email:"", msg:""};
+        };
+
+        $scope.setResponse = function (response) {
+            // send the `response` to your server for verification.
+            //console.log(response);
+            $scope.email['g-recaptcha-response'] = response; 
         };
     });
 

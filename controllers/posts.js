@@ -2,27 +2,6 @@ module.exports = function(app) {
 	var Post = app.models.post;
 	var Comment = app.models.comment;
 
-	var checkCaptcha = function(captchaResponse, callback){
-		var https = require('https');
-		https.get("https://www.google.com/recaptcha/api/siteverify?secret=6LeGNQcTAAAAAIwc9Fch23eGYd9hi6TuEEsV6C5N&response=" + captchaResponse, function(resp){
-			var data = "";
-			resp.on('data', function(chunk){
-				data += chunk.toString();
-				//console.log(chunk);
-			});
-			resp.on('end', function() {
-				try {
-					var parsedData = JSON.parse(data);
-					callback(parsedData.success);
-				} catch (e) {
-					callback(false);
-				}
-			});
-		}).on("error", function(e){
-			app.sendResponse(res, false, "Xiiiii deu zica! Envio do comentário.", {showNoty: false});
-		});
-	};
-
 	var PostController = {
 		createSavePost: function(req, res){
 			var post = req.body.post;
@@ -103,7 +82,7 @@ module.exports = function(app) {
 
 			var responseCaptcha = req.body.comment['g-recaptcha-response'];
 
-			checkCaptcha(responseCaptcha,function(success) {
+			app.checkCaptcha(responseCaptcha, res,function(success) {
 				if (success) {
 					Post.findByIdAndUpdate(id, {$push: {"comments": comment}},{safe: true, upsert: true},function(erro, model) {
 							if (!erro) {
