@@ -13,8 +13,8 @@ module.exports = function(app) {
 					var transporter = nodemailer.createTransport({
 						service: 'Gmail',
 						auth: {
-							user: 'fandre@gmail.com',
-							pass: 'erfeujwvltdndyfv'
+							user: '[email]',
+							pass: '[pass]'
 						}
 					});
 
@@ -23,8 +23,8 @@ module.exports = function(app) {
 
 					// setup e-mail data with unicode symbols
 					var mailOptions = {
-						from: 'fandre@gmail.com', // sender address
-						to: 'fandre@gmail.com', // list of receivers
+						from: '[from]', // sender address
+						to: '[to]', // list of receivers
 						subject: 'IamFerraz - Contato', // Subject line
 						text: 'Email: ' + email.email + '\r\n\r\n' + email.msg, // plaintext body
 						html: 'Email: ' + email.email + '<br />' + email.msg // html body
