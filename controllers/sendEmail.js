@@ -4,7 +4,7 @@ module.exports = function(app) {
 	var SendEmailController = {
 		sendEmail: function(req, res) {
 			var email = req.body.email;
-
+			
 			var responseCaptcha = req.body.email['g-recaptcha-response'];
 
 			app.checkCaptcha(responseCaptcha, res,function(success) {
@@ -23,11 +23,11 @@ module.exports = function(app) {
 
 					// setup e-mail data with unicode symbols
 					var mailOptions = {
-						from: 'iAmFerraz ✔ <fandre@gmail.com>', // sender address
+						from: 'fandre@gmail.com', // sender address
 						to: 'fandre@gmail.com', // list of receivers
-						subject: 'Hello ✔', // Subject line
-						text: 'Hello world ✔', // plaintext body
-						html: '<b>Hello world ✔</b>' // html body
+						subject: 'IamFerraz - Contato', // Subject line
+						text: 'Email: ' + email.email + '\r\n\r\n' + email.msg, // plaintext body
+						html: 'Email: ' + email.email + '<br />' + email.msg // html body
 					};
 
 					// send mail with defined transport object
