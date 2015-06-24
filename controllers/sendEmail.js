@@ -33,14 +33,14 @@ module.exports = function(app) {
 					// send mail with defined transport object
 					transporter.sendMail(mailOptions, function(error, info){
 						if(error){
-							app.sendResponse(res, false, "Xiiiii deu zica! No envio do email." + JSON.stringify(error));
+							app.sendResponse(res, false, "Xiiiii deu zica! No envio do email." + JSON.stringify(error), null, {showNoty: true});
 						}else{
-							app.sendResponse(res, true, "Email enviado!", info.response);
+							app.sendResponse(res, true, "Email enviado!", info.response,{showNoty: true});
 						}
 					});
 				}
 				else
-					app.sendResponse(res, false, "Xiiiii deu zica! No envio do email.");
+					app.sendResponse(res, false, "Xiiiii deu zica! No envio do email.",null, {showNoty: true});
 			});
 		}
 	};

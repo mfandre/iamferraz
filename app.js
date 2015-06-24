@@ -58,15 +58,12 @@ app.sendResponse = function(res, success, message, data, config){
 app.checkCaptcha = function(captchaResponse, response, callback){
     var https = require('https');
     https.get("https://www.google.com/recaptcha/api/siteverify?secret=6LeGNQcTAAAAAIwc9Fch23eGYd9hi6TuEEsV6C5N&response=" + captchaResponse, function(resp){
-      console.log("zica dos infernos1");
       var data = "";
       resp.on('data', function(chunk){
-        console.log("zica dos infernos2");
         data += chunk.toString();
         //console.log(chunk);
       });
       resp.on('end', function() {
-        console.log("zica dos infernos3");
         try {
           var parsedData = JSON.parse(data);
           callback(parsedData.success);
@@ -75,8 +72,7 @@ app.checkCaptcha = function(captchaResponse, response, callback){
         }
       });
     }).on("error", function(e){
-      console.log("zica dos infernos4");
-      app.sendResponse(response, false, "WTF Google! Captcha doesn't responds correctly..." + JSON.stringify(e), null,{showNoty: true});
+      app.sendResponse(response, false, "WTF Google! Captcha doesn't responds correctly..." + JSON.stringify(e), null,{showNoty: false});
     });
   };
 
