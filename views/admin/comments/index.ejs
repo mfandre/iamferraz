@@ -1,0 +1,56 @@
+<div class="row" ng-controller="AdminCommentController as commetCtrl">
+    <div ng-init="getComments()" class="animated fadeIn active" >
+        <div class="row">
+            <h3>Comentário</h3>
+            <div class="bs-example">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título do Post</th>
+                        <th>Nome</th>
+                        <th>Data criação</th>
+                        <th>Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="comment in comments">
+                        <td>{{comment._id}}</td>
+                        <td>{{comment.post_title}}</td>
+                        <td>{{comment.name}}</td>
+                        <td>{{comment.created_date | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                        <td><button ng-click="openCreateEditCommentModal('Editar Comentário', comment)" type="button" class="btn btn-primary">Editar</button><i class="link-spacer"></i><button ng-click="deleteComment(comment._id)" type="button" class="btn btn-danger">Deletar</button></td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="create-or-edit-comment-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{modalTitle}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input ng-model="comment.name" type="text" placeholder="Nome" class="form-control" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Comentário</label>
+                        <textarea ng-model="comment.comment" type="text" placeholder="Nome" class="form-control" name="name"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button ng-click="createSaveComment(comment)" type="button" class="btn btn-default" value="Send">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--/row -->

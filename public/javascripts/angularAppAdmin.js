@@ -20,6 +20,10 @@
                 url: "admin/portal/users",
                 templateUrl: "admin/portal/users"
             })
+            .state('comments', {
+                url: "admin/portal/comments",
+                templateUrl: "admin/portal/comments"
+            })
             .state('categories', {
                 url: "admin/portal/categories",
                 templateUrl: "admin/portal/categories"
@@ -221,6 +225,26 @@
         }
     });
 
+    angular.module('myAppCommon.Factories').factory('commentAjaxServices', function ($http) {
+        return {
+            getComments : function () {
+                return $http.post('/comment/getComments');
+            },
+            createSaveComment : function (comment) {
+                return $http.post('/comment/createSaveComment', {comment:comment});
+            },
+            deleteComment : function (id) {
+                return $http.post('/comment/deleteComment', {id:id});
+            },
+            editComment : function (comment) {
+                return $http.post('/comment/editComment', {comment:comment});
+            },
+            getComment : function (id) {
+                return $http.post('/comment/getComment', {id:id});
+            }
+        }
+    });
+
     angular.module('myAppCommon.Factories').factory('serverStatusAjaxServices', function ($http) {
         return {
             getStatus : function () {
@@ -394,6 +418,48 @@
 
         $scope.getCategory = function(id){
             categoryAjaxServices.getCategory(id);
+        }
+    });
+
+    angularAppAdmin.controller("AdminCommentController", function($scope, $filter, commentAjaxServices){
+        $scope.comment = {};
+        $scope.modalTitle = "";
+        
+        $scope.openCreateEditCommentModal = function(title, comment){
+            $scope.modalTitle = title;
+            $scope.comment = comment;
+            $("#create-or-edit-comment-modal").modal("show");
+
+        }
+
+        $scope.createSaveComment = function(comment){
+            commentAjaxServices.createSaveComment(comment)
+                .success(function(data, status, headers, config) {
+                    if(data.success && !data.config.modified)
+                        $scope.comments.push(data.data);
+                });
+        }
+
+        $scope.getComments = function(){
+            commentAjaxServices.getComments()
+                .success(function(data, status, headers, config) {
+                    if(data.success)
+                        $scope.comments = $filter('orderBy')(data.data, '-created_date');
+                });
+        }
+
+        $scope.deleteComment = function(id){
+            commentAjaxServices.deleteComment(id)
+                .success(function(data, status, headers, config) {
+                });
+        }
+
+        $scope.editComment = function(category){
+            commentAjaxServices.editComment(category);
+        }
+
+        $scope.getComment = function(id){
+            commentAjaxServices.getComment(id);
         }
     });
 
