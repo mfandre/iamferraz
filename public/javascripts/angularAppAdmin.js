@@ -233,8 +233,8 @@
             createSaveComment : function (comment) {
                 return $http.post('/comment/createSaveComment', {comment:comment});
             },
-            deleteComment : function (id) {
-                return $http.post('/comment/deleteComment', {id:id});
+            deleteComment : function (comment_id, post_id) {
+                return $http.post('/comment/deleteComment', {comment_id : comment_id, post_id : post_id});
             },
             editComment : function (comment) {
                 return $http.post('/comment/editComment', {comment:comment});
@@ -448,9 +448,10 @@
                 });
         }
 
-        $scope.deleteComment = function(id){
-            commentAjaxServices.deleteComment(id)
+        $scope.deleteComment = function(comment_id,post_id){
+            commentAjaxServices.deleteComment(comment_id,post_id)
                 .success(function(data, status, headers, config) {
+                    $scope.comments = $filter('filter')($scope.comments, {_id: '!' + comment_id})
                 });
         }
 

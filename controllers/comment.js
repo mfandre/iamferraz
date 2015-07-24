@@ -2,32 +2,13 @@ module.exports = function(app) {
 	var Post = app.models.post;
 
 	var CommentController = {
-		/*createSaveComment: function(req, res){
+		createSaveComment: function(req, res){
 			var comment = req.body.comment;
 			//console.log(JSON.stringify(req.body));
 			//console.log(JSON.stringify(category));
 
-			if (comment._id){
-				Post.comments.findByIdAndUpdate(comment._id, { $set: comment }, function (erro, comment) {
-					if (!erro) {
-						app.sendResponse(res, true, "Comment alterada com sucesso.", comment, {modified : true});
-					}
-					else {
-						app.sendResponse(res, false, "Xiiiii deu zica! Edição do comment." + erro, comment);
-					}
-				});
-			}
-			else
-			{
-				Post.create(comment, function(erro, comment){
-					if(!erro){
-						app.sendResponse(res, true, "Comentário criada com sucesso.", comment, {modified : false});
-					}else{
-						app.sendResponse(res, false, "Xiiiii deu zica! Criação do comment." + erro, comment);
-					}
-				});
-			}
-		},*/
+			app.sendResponse(res, false, "Falta Implementar!!!");
+		},
 		getComments: function(req, res){
 			Post.find({}, function(erro, posts) {
 				if(!erro){
@@ -48,50 +29,58 @@ module.exports = function(app) {
 
 						comments = comments.concat(tempComments);
 					}
-					console.log(comments);
-					app.sendResponse(res, true, "Retornando todos os comentarios!", comments, {showNoty: false});
+					//console.log(comments);
+					app.sendResponse(res, true, "Retornando todos os comentários!", comments, {showNoty: false});
 				}else{
-					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os comentarios." + erro, null);
+					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os comentários." + erro, null);
 				}
 			});
 		},
-		/*deleteComment: function(req, res){
-			var id = req.body.id;
-			console.log(JSON.stringify(id));
+		deleteComment: function(req, res){
+			var comment_id = req.body.comment_id;
+			var post_id = req.body.post_id;
+			//console.log(JSON.stringify(post_id));
+			//console.log(JSON.stringify(comment_id));
 
-			Post.comments.remove({ _id: id }, function(erro) {
-				if (!erro) {
-					app.sendResponse(res, true, "Comentario deletada!", id);
+			Post.findById(post_id, function (err, post) {
+				if(!err)
+				{
+					var comment =  post.comments.id(comment_id);
+					comment.remove();
+					post.save(function(err, post){
+						if(!err)
+							app.sendResponse(res, true, "Comentário alterado com sucesso.", comment, {modified : true});
+						else
+							app.sendResponse(res, false, "Xiiiii deu zica! Erro ao deletar comentário." + erro, null);
+					});
+					
 				}
 				else {
-					app.sendResponse(res, false, "Xiiiii deu zica! Deletar comment." + erro, id);
+					app.sendResponse(res, false, "Xiiiii deu zica! Erro ao deletar comentário." + erro, null);
 				}
 			});
 		},
 		editComment: function(req, res){
 			var comment = req.body.comment;
 			//console.log(JSON.stringify(category));
-			Post.comments.findByIdAndUpdate(id, { $set: comment }, function (erro, comment) {
-				if (!erro) {
-					app.sendResponse(res, true, "Comentario alterada com sucesso.", comment, {modified : true});
-				}
-				else {
-					app.sendResponse(res, false, "Xiiiii deu zica! No retorno de todos os comentarios." + erro, comment);
-				}
-			});
+			app.sendResponse(res, false, "Falta Implementar!!!");
 		},
 		getComment: function(req, res){
 			var id = req.body.id;
-			console.log(JSON.stringify(id));
-			Post.comments.findById(id, function (erro, comment) {
+			//console.log(JSON.stringify(id));
+			Post.find({}, function (erro, posts) {
 				if (!erro) {
+					var comment = posts.comments.filter(function (comment) {
+						return comment._id === id;
+					});
+
 					app.sendResponse(res, true, "Comentário encontrado!", comment);
 				}
 				else {
-					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do comment." + erro, comment);
+					app.sendResponse(res, false, "Xiiiii deu zica! Na busca do comentário." + erro, null);
 				}
 			});
-		}*/
+		}
 	};
 	return CommentController;
 };
