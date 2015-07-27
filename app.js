@@ -82,6 +82,10 @@ load('models')
   .then('schedule')
   .into(app);
 
+/*app.route('/*').get(function(req, res) {
+  res.render('home/index');
+});*/
+
 app.listen(3000, function(){
   console.log("iamferraz is running bicht!!!");
 });

@@ -8,7 +8,7 @@
     var angularAppBlog = angular.module('myAppBlog', ['ui.router','ngResource', 'angular-loading-bar', 'ngAnimate','ngSanitize','vcRecaptcha','myAppCommon.Directives','myAppCommon.Factories','myAppCommon.Controllers']);
 
     //configurando rotas do Admin
-    angularAppAdmin.config(function ($stateProvider, $urlRouterProvider) {
+    angularAppAdmin.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $urlRouterProvider.otherwise("/admin");
 
         $stateProvider
@@ -32,12 +32,13 @@
                 url: "admin/portal/serverStatus",
                 templateUrl: "admin/portal/serverStatus"
             });
+        $locationProvider.html5Mode(true).hashPrefix('!');
     });
 
     //configurando rotas do Blog
-    angularAppBlog.config(function ($stateProvider, $urlRouterProvider) {
+    angularAppBlog.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         $urlRouterProvider.otherwise("/posts");
-
+        
         $stateProvider
             .state('posts', {
                 url: "/posts",
@@ -55,6 +56,8 @@
                 url: "/resume",
                 templateUrl: "/resume"
             });
+        $locationProvider.html5Mode(true).hashPrefix('!');
+
     });
 
     //configurando interceptor de requisicoes ajax na aplicacao Admin
