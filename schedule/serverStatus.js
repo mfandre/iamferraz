@@ -7,7 +7,7 @@ module.exports = function(app) {
 
 	try {
 
-		new CronJob('1 * * * * *', function() {
+		new CronJob('* 0 * * * *', function() {
 			//path = 'c:';
 			//path = '/dev/vda1';
 
